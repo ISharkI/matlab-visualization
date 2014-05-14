@@ -7,7 +7,7 @@ This program was created at the University of Stuttgart (Germany) during our stu
 
 Authors:
 * Michael Mueller (michael.mueller@sharkarea.net)
-* Jon Schlipf
+* Jón Schlipf
 * Xudong Gao
 
 Furthermore as supervising tutor:
@@ -32,25 +32,31 @@ Supervisor
 =====================
 Currently the supervisor is accessed by the following schema
 
- visualizeSignal(loader module number, input file location, [Filter Module Array, Output Module Array])
+ visualizeSignal(inputFileLocation, [loaderModuleNumber], [ModuleArray])
 
-Therefore the module number is defined below.
-The Filter module array should be an single line array with an finite number of modules which should be executed after each other. 
-The Output module array needs to macht the dimension of the filter module array because it generates the output after this module was executed. So you can display the output at a certain point in the module chain. 
-For Module numbers see the documentation below.
-If no Arrays are given a "1" for the filter module and the output mudle will be assumed (so the input is just displayed as a time plot)
+Therefore the module numberis are defined below.
+The module array is array with an finite number of modules which should be executed consecutively. Therefore the array has N rows for N filters.
+Each row consist out of three parts every row
+* first element contains the output module number
+* second element contains the filter module number
+* the following elements contain the parameters for each filter module
+
+To match dimensions of the array unneded positions need to be filled up (e.g. with zeroes).
+This way we can display the output at a certain point in the module chain. 
+If no input file type is given a "1" for Matlab files will be assumed.
+If no Array is given a "[1 1]" will be assumed (so the input is just displayed as a time plot).
 
 Loader Modules
 =====================
 Currently supported loader modules (and their associated loader module numbers) are:
-* 1 - Matlab file loader (.m)
+* 1 - Matlab file loader (.mat)
 
-Filter Modules
+Filter Module Numbers
 =====================
 Currently supported filter modules (and their associated filter module numbers) are:
 * 1 - Delay module (returns the input unchanged)
 
-Output Modules
+Output Module Numbers
 =====================
 * 0 - No Output
 * 1 - Display time plot (returns picture with time plot)
@@ -58,9 +64,10 @@ Output Modules
 
 Module Interface
 =====================
-The Module interface is an single line array like the scheme
- ([#P],[P1...N],[Signal])
+The Module interface is an double line array like the scheme
+ ([#P],[P1...N],[TimeSignal];0,0...0,[ValueSignal])
 Where
 * [#P] - describes the amount of arguments passed to the module
 * [P1...N] - are the arguments 
-* [Signal] - is the signal itself
+* [TimeSignal] - is the time axis (times where value was recorded)
+* [ValueSignal] - is the signal with its values

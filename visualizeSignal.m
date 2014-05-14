@@ -1,19 +1,22 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% EXAMPLE: visualizeSignal("inputFileLocation", [loaderModuleNumber], [FilterModuleArray, OutputModuleArray])
+% EXAMPLE: visualizeSignal("inputFileLocation", [loaderModuleNumber], [ModuleArray])
 % Parameters
-%   inputFileLocation,              % defines location of file to load
+%   inputFileLocation               defines location of file to load
 % 
 % Optional Parameters
-%   loaderModuleNumber,             % number of loader module
-%   FilterModuleArray,              % single line array of filters to be executed
-%   OutputModuleArray               % single line array of output methods
+%   loaderModuleNumber              number of loader module
+%   ModuleArray                     array of output modules, filters and their values to be executed
+%                                   each row consists out ouf one column
+%                                   for the output, one column for the filter
+%                                   and the following columns for the
+%                                   parameters
 
-% examples
+% examplesy
 % display input signal from m file: visualizeSignal(example.m)
-% display signal after low pass:    visualizeSignal(1, example.m, [2], [1])
+% display signal after low pass:    visualizeSignal(1, example.m, [2 1])
 
 % BEGIN, main function (supervisor)
-function visualizeSignal(inputFileLocation,loaderModuleNumber,FilterModuleArray,OutputModuleArray)
+function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
 
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -24,28 +27,14 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,FilterModuleArray,
         loaderModuleNumber = 1;
     end
     
-    % check if arrays are set and set defaults if not
-    if ~exist('FilterModuleArray','var')
-        FilterModuleArray = [1];
-    end
-    if ~exist('OutputModuleArray','var')
-        OutputModuleArray = [1];
-    end
-    
-    % check if arrays match in dimension
-    [rf,cf] = size(FilterModuleArray);
-    [ro,co] = size(OutputModuleArray);
-    if ~(rf == 1 || ro == 1)
-        error('ERROR: Array has more than 1 row!');
-    end
-    
-    if ~(cf == co)
-        error('ERROR: Arrays do not match in dimension!');
+    % check if array is set
+    if ~exist('ModuleArray','var')
+        ModuleArray = [1 1];
     end
     
     % check if file exists
     if (exist('inputFileLocation', 'file') ~= 2) == 0
-        error('ERROR: Found no input File!','inputFileLocation');
+        error('ERROR: Found no input File!');
     end
     
     % END check input parameters for consistency
@@ -56,8 +45,6 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,FilterModuleArray,
         % Matlab files
         case 1
             signal = loadMatlab(inputFileLocation);
-            %handle.signal = loadMatlab(inputFileLocation);
-           
         % kill script if invalid input occurs
         otherwise
             error('ERROR: No valid loader specified!');
@@ -67,25 +54,32 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,FilterModuleArray,
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
     % BEGIN to access filter and output
 
-    for i=1:length(FilterModuleArray)
+    for i=1:size(ModuleArray,1)
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
         % BEGIN to access filter
         
-        switch i
+        switch ModuleArray(i,1)
             % delay filter
             case 1
+                % no arguments needed
                 signal = delayFilter(signal);
+        %   case 4
+        %       % add arguments (limitfrequency)
+        %       params = [ 1 ModuleArray(i,3); 0 0];
+        %       signal = [ params signal];
+        %       signal = highFilter(signal);
             % kill script if invalid input occurs
             otherwise
                 error('ERROR: No valid filter at position' + i + 'specified!');
         end
-        
+        %testoutput
+        size(signal)
         % END to access filter
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
     	% BEGIN to access output
         %
-        %switch 
+        %switch ModuleArray(i,2)
         %   % skip if unwanted
         %    case 0
         %       
