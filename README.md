@@ -18,6 +18,7 @@ This program is distributed under the GPLv2 License which can be found at LICENS
 Version
 =====================
 Current Version of this program is 0.01a.
+So far only single channel Signals are supported.
 
 Macro Structure
 =====================
