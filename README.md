@@ -55,3 +55,11 @@ Output Modules
 * 1 - Display time plot (returns picture with time plot)
 * 2 - Display frequency plot (returns picture with frequency plot)
 
+Module Interface
+=====================
+The Module interface is an single line array like the scheme
+ ([#P],[P1...N],[Signal])
+Where
+* [#P] - describes the amount of arguments passed to the module
+* [P1...N] - are the arguments 
+* [Signal] - is the signal itself
