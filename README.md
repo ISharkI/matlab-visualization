@@ -1,7 +1,7 @@
-matlab-visualization
+visualizeSignal
 ====================
 
-Virtualization of different input signals in Matlab with filters.
+Visualization of different input signals in Matlab with filters.
 
 This program was created at the University of Stuttgart (Germany) during our studies. Therefore besides the Authors the University of Stuttgart is also part of the copyright holders.
 
