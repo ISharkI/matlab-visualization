@@ -59,7 +59,7 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
         % BEGIN to access filter
         
-        switch ModuleArray(i,1)
+        switch ModuleArray(i,2)
             % delay filter
             case 1
                 % no arguments needed
@@ -79,7 +79,7 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
     	% BEGIN to access output
         %
-        %switch ModuleArray(i,2)
+        %switch ModuleArray(i,1)
         %   % skip if unwanted
         %    case 0
         %       
