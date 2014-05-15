@@ -75,6 +75,9 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
         end
         %testoutput
         size(signal)
+        t = signal(1,:);
+        v = signal(2,:);
+        plot(t,v)
         % END to access filter
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
     	% BEGIN to access output
