@@ -7,8 +7,7 @@
 %   loaderModuleNumber              number of loader module
 %   ModuleArray                     array of output modules, filters and their values to be executed
 %                                   each row consists out ouf one column
-%                                   for the output, one column for the filter
-%                                   and the following columns for the
+%                                   for the output/filter and the following columns for the
 %                                   parameters
 
 % examplesy
@@ -29,7 +28,7 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
     
     % check if array is set
     if ~exist('ModuleArray','var')
-        ModuleArray = [1 1];
+        ModuleArray = [2 0];
     end
     
     % check if file exists
@@ -57,13 +56,20 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
     for i=1:size(ModuleArray,1)
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-        % BEGIN to access filter
+        % BEGIN to access filter/output
         
-        switch ModuleArray(i,2)
+        switch ModuleArray(i,1)
             % delay filter
             case 1
                 % no arguments needed
                 signal = delayFilter(signal);
+            
+            % time/frequency plot
+            case 2
+                % get argument which plot type
+                param = [1 ModuleArray(i,2); 0 0];
+                inputsignal = [param signal];
+                simplePlot(inputsignal);
         %   case 4
         %       % add arguments (limitfrequency)
         %       params = [ 1 ModuleArray(i,3); 0 0];
@@ -74,29 +80,12 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
                 error('ERROR: No valid filter at position' + i + 'specified!');
         end
         %testoutput
-        size(signal)
-        t = signal(1,:);
-        v = signal(2,:);
-        plot(t,v)
-        % END to access filter
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-    	% BEGIN to access output
-        %
-        %switch ModuleArray(i,1)
-        %   % skip if unwanted
-        %    case 0
-        %       
-        %   % time plot
-        %    case 1
-        %        plot = timePlot(signal);
-        %    case 2
-        %        plot = frequencyPlot(signal);
-        %    % kill script if invalid input occurs
-        %    otherwise
-        %        error('ERROR: No valid output at position' + i + 'specified!');
-        %end
-        %
-        % END access output
+        %size(signal)
+        %t = signal(1,:);
+        %v = signal(2,:);
+        %plot(t,v)
+                
+        % END access filter/output
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
     end
