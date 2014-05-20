@@ -1,0 +1,336 @@
+%% LyX 2.0.6 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass{article}
+\setlength{\parindent}{0cm}
+\usepackage{fancybox}
+\usepackage{calc}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\newenvironment{lyxcode}
+{\par\begin{list}{}{
+\setlength{\rightmargin}{\leftmargin}
+\setlength{\listparindent}{0pt}% needed for AMS classes
+\raggedright
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\normalfont\ttfamily}%
+ \item[]}
+{\end{list}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{a4wide}
+
+\makeatother
+
+\begin{document}
+
+\title{Matlab Visualization}
+
+
+\date{University of Stuttgart, 05/20/2014}
+
+
+\author{Gao Xudong, Jon Schlipf, Michael Mueller, Marc Gauger}
+
+\maketitle
+\newpage{}
+
+\tableofcontents{}
+
+\newpage{}
+\begin{abstract}
+During our Studies at the University of Stuttgart we created a Matlab
+Script to visualize the Input of different Signals. This can be used
+to verify a correct recording of a signal in an experimental environment
+but can also be used to manipulate the signal or display it in different
+ways.
+\end{abstract}
+
+\section{Introduction}
+
+This software was created to analyze raw signal of all kinds but especially
+radio frequency signals at the University of Stuttgart (Germany) during
+our studies. Therefore besides the authors the University of Stuttgart
+is also part of the copyright holders.
+
+
+\subsection{Authors}
+\begin{itemize}
+\item Michael Mueller (michael.mueller@sharkarea.net) 
+\item Jon Schlipf 
+\item Gao Xudong
+\end{itemize}
+Furthermore as supervising tutor: 
+\begin{itemize}
+\item Marc Gauger (Marc.Gauger@inue.uni-stuttgart.de) 
+\end{itemize}
+This program is distributed under the GPLv2 License which can be found
+at http://www.gnu.org/licenses/gpl-2.0.html
+
+
+\subsection{Version}
+
+Current Version of this program is 0.02. So far only single channel
+Signals are supported. 
+
+
+\subsubsection{Changelog}
+\begin{itemize}
+\item 0.01 - Created the general structure and simple modules (Supervisor,
+Loader, Delay Signal, simplePlot)
+\item 0.02 - Created more modules (fourier, fourierBlocks, cutout, highpass,
+lowpass, bandpass, energy spectrum, resampling, digital merging)
+\end{itemize}
+
+\section{Components}
+
+The software consists of three parts 
+\begin{itemize}
+\item The ``Supervisor'' is the supervising engine and controls the combination
+of the modules. It is the only part of this program which can be directly
+accessed by the user.
+\item The ``Loader'' are modules which convert the input to a usable format. 
+\item The ``Modules'' are different modules (e.g. lowpass filter, simple
+output) which can be consecutively added and walked through by the
+supervisor. They are used to manipulate the signal or display it. 
+\end{itemize}
+
+\subsection{the Supervisor}
+
+Currently the supervisor is accessed by the following schema
+\begin{lyxcode}
+visualizeSignal(``inputFileLocation'',{[}loaderModuleNumber{]},{[}ModuleArray{]})
+\end{lyxcode}
+The module array is an array with an finite number of modules the
+supervisor will execute consecutiveley in a chain. Therefore the array
+has N rows for N Modules. Each row consists out of two parts
+\begin{itemize}
+\item The first element contains the module number (modifier or output,
+mapping can be found below)
+\item The following elements contain the parameters for each module. If
+no arguments are needed it can be filled up with anything (e.g. zeroes).
+Parameters that are not needed by the respective module will just
+be ignored.
+\end{itemize}
+Example:
+
+\[
+\left(\begin{array}{ccccc}
+2 & 0 & 1 & 0 & 0\\
+1 & 0 & 0 & 0 & 0\\
+\ldots & \ldots & \ldots & \ldots & \ldots\\
+4 & 1 & 0 & 0 & 0
+\end{array}\right)
+\]
+
+
+By using the same interface for both module types (output modules
+and filters modules), the user can display the output at any point
+in the module chain.
+
+If no input file type is given Matlab files will be assumed as input.
+Furthermore if no module array is given a ``{[}2 0 1{]}'' will be
+assumed. This means the input is just displayed as a time plot in
+figure 1.
+
+
+\subsection{Loader}
+
+``Loader'' are modules used to import raw data for processing within
+the supervisor. Each Loader is designed to import data from a specific
+file type. They access the file through its file name or a directory
+path. (Currently there is only one type of loader
+
+
+\subsection{Modules}
+
+The following modules are designed to perform different tasks but
+are sharing a common interface. The Module Interface is an double
+row array 
+
+\[
+\left(\begin{array}{ccc}
+\left[\begin{array}{c}
+P\\
+0
+\end{array}\right] & \left[\begin{array}{cccc}
+P_{1} & P_{2} & \ldots & P_{N}\\
+0 & 0 & 0 & 0
+\end{array}\right] & \left[\begin{array}{c}
+OrientationSignal\\
+ValueSignal
+\end{array}\right]\end{array}\right)
+\]
+
+
+Where 
+\begin{itemize}
+\item P - describes the amount of arguments passed to the module (second
+row is filled with zero) 
+\item $P_{1}\ldots P_{N}$ - are the arguments (While N is given in the
+beginning of the array as P) 
+\item OrientationSignal - is the time axis (times where value was recorded)
+or the frequency axis for transformed signals 
+\item ValueSignal - is the signal value corresponding to the respective
+Orientation 
+\end{itemize}
+This interface is used by the supervisor to call the modules and can
+also be accessed manually for debug purposes. 
+
+
+\section{Available Loader}
+
+
+\subsection{loadMatlab}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{loadMatlab.m}
+\item Loader number: \textbf{1}
+\item Loads File Type: \textbf{{*}.mat}\end{itemize}
+%
+\end{minipage}}
+
+This Loader loads the raw signal from a Matlab file which contains
+two vectors. It assumes ``v'' as the vector with the discrete values
+for each ``t'' vector containing the corresponding time values.
+
+
+\section{Available Modules}
+
+We differentiate between two kind of Modules:
+\begin{itemize}
+\item ``Modifier Modules'' are used to manipulate signals when the supervisor
+calls them, its ``signal'' variable is overwritten and its old state
+is lost. Modifier Modules can also change the way the signal is to
+be interpreted. For example, the ``fourier'' module applies an fast
+fourier transformation or inverse fast fourier transformation, thus
+transforming the signal to another domain. This information will not
+be saved, so the sequence of the modules is important.
+\item ``Output Modules'' do not manipulate the signal, but display or
+output its current state. 
+\end{itemize}
+
+\subsection{delayFilter}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{delayFilter.m}
+\item Module number: \textbf{1}
+\item Arguments: \textbf{none}
+\item Function: Does nothing and may be used to wait for other processes.\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{simplePlot}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{simplePlot.m}
+\item Module number: \textbf{2}
+\item Arguments: \textbf{2}
+
+\begin{itemize}
+\item first argument: type 
+
+\begin{itemize}
+\item determines how the signal has to be interpreted
+\item possible values:
+
+\begin{itemize}
+\item 0 - time domain
+\item 1 - frequency domain
+\end{itemize}
+\end{itemize}
+\item second argument: figure {[}1:n{]} determines in which figure the signal
+is to be plotted 
+\end{itemize}
+\item Function: Plots a signal in the requested figure. It depends on the
+argument 'type' if the Signal should be recognized as a funcion of
+time or frequency.\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{fourier}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{fourier.m}
+\item Module number: \textbf{3}
+\item Arguments: \textbf{1}
+
+\begin{itemize}
+\item first argument: type 
+
+\begin{itemize}
+\item determines what kind of transformation should be done
+\item possible values:
+
+\begin{itemize}
+\item 0 - fast fourier transform
+\item 1 - inverse fast fourier transform
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\item Function: Applies a fast fourier transform or an inverse fast fourier
+transform, depending on the argument ``type''.\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{fourierBlocks}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{fourierBlocks.m}
+\item Module number: \textbf{4}
+\item Arguments: \textbf{1}
+
+\begin{itemize}
+\item first argument: block length
+
+\begin{itemize}
+\item {[}1:duration of signal{]} determines the length (in samples) of the
+blocks the signal will be divided into
+\end{itemize}
+\end{itemize}
+\item Function: Applies a fast fourier transform or an inverse fast fourier
+transform, depending on the argument ``type''.\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{cutout}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{cutout.m}
+\item Module number: \textbf{5}
+\item Arguments: \textbf{2}
+
+\begin{itemize}
+\item first argument: start sample
+
+\begin{itemize}
+\item {[}1:startsample{]} determines the start sample of the signal which
+will be cut out
+\end{itemize}
+\item second argument: end sample
+
+\begin{itemize}
+\item {[}1:endsample{]} determines the end sample of the signal which will
+be cut out
+\end{itemize}
+\end{itemize}
+\item Function: If ``startsample'' is smaller than ``endsample'', all
+samples between the two samples will be returned. If ``startsample''
+is greater than ``endsample'', the function returns the samples
+between startsample and the end of the input signal and the samples
+between the beginning and endsample. If the two arguments are equal,
+the sample at that position will be returned.\end{itemize}
+%
+\end{minipage}}
+\end{document}
