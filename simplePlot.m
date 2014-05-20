@@ -1,18 +1,22 @@
 function [  ] = simplePlot(  input )
 %UNTITLED Summary of this function goes here
-%   Currently uses one Parameter: type
+%   Currently uses two Parameter: 
+%   type (0= standard, 1=fourier transformed signal)
+%   plotNumber (determines in which figure the plot will be drawn)
 
-% abfragen der parameter anzahl, hier 1 (zeit oder frequenzbereich)
+% check the number of parameters
 argsLength=input(1,1);
 
-        %arbeite nur das array ab, wenn die argumente existieren
-if argsLength>=1
-    type=input(2,1);
+% check if t least one parameter exists
+if argsLength>=2
+    type=input(1,2);
+    plotNumber=input(1,3);
+    
 
     %y-Achse
-    x=input(1,argsLength+1:end);
+    x=input(1,argsLength+2:end);
     %x-Achse
-    y=input(2,argsLength+1:end);
+    y=input(2,argsLength+2:end);
     
     %zeitbereich
     if (type==0)
@@ -23,15 +27,18 @@ if argsLength>=1
         y=abs(y);
         
     else
-        error('Fehler');
+        error('parameter out of range');
     end
     
-    %plot it
+    %plot it in the right figure
+    figure (plotNumber);
     plot(x,y)   
     if (type==0)
-        xlabel('t');
+        xlabel('t in seconds');
     elseif (type==1)
-         xlabel('f');  
+         xlabel('f in Hertz');  
+    else
+        error('parameter out of range')
     end
     
 end

@@ -28,7 +28,7 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
     
     % check if array is set
     if ~exist('ModuleArray','var')
-        ModuleArray = [2 0];
+        ModuleArray = [2 0 1];
     end
     
     % check if file exists
@@ -66,10 +66,40 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
             
             % time/frequency plot
             case 2
+                % set number of arguments
+                num = [2;0];
                 % get argument which plot type
-                param = [1 ModuleArray(i,2); 0 0];
-                inputsignal = [param signal];
+                type = [ ModuleArray(i,2);  0];
+                % get argument which figure
+                figure =[ModuleArray(i,3);0];
+                inputsignal = [num type figure signal];
                 simplePlot(inputsignal);
+            % fft or ifft
+            case 3
+                % set number of arguments
+                num = [1;0];
+                %parameter type
+                type = [ ModuleArray(i,2);  0];
+                inputsignal = [num type signal];
+                signal=fourier(inputsignal);
+            % blockwise fft
+            case 4
+                % set number of arguments
+                num = [1;0];
+                %parameter block length
+                length=[ ModuleArray(i,2);  0];
+                inputsignal=[num length signal];
+                signal=fourierBlocks(inputsignal);
+            % cutout
+            case 5
+                % set number of arguments
+                num = [2;0];
+                %parameter start_sample
+                start_sample=[ ModuleArray(i,2);  0];
+                %parameter end_sample
+                end_sample=[ ModuleArray(i,3);  0];
+                inputsignal=[num start_sample end_sample signal];
+                signal=fourierBlocks(inputsignal);
         %   case 4
         %       % add arguments (limitfrequency)
         %       params = [ 1 ModuleArray(i,3); 0 0];
