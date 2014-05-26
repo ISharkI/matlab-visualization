@@ -100,6 +100,31 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
                 end_sample=[ ModuleArray(i,3);  0];
                 inputsignal=[num start_sample end_sample signal];
                 signal=fourierBlocks(inputsignal);
+            % pass filter
+            case 6
+                % set number of arguments
+                num = [3 ; 0];
+                % type
+                type = [ModuleArray(i,2);  0];
+                % parameter low frequency in Hz
+                lowfreq=[ModuleArray(i,3);  0];
+                % parameter high frequency in Hz
+                highfreq=[ModuleArray(i,4);  0];
+                inputsignal=[num type lowfreq highfreq signal];
+                signal=passFilter(inputsignal);
+            % power spectrum
+            case 7
+                % set number of arguments
+                num = [0 ; 0];
+                inputsignal=[num signal];
+                powerSpec=powerSpectrum(inputsignal);
+            % audio output
+            case 8
+                % set number of arguments
+                num = [0 ; 0];
+                inputsignal=[num signal];
+                audioOutput(inputsignal);
+                
         %   case 4
         %       % add arguments (limitfrequency)
         %       params = [ 1 ModuleArray(i,3); 0 0];
@@ -109,11 +134,6 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
             otherwise
                 error('ERROR: No valid filter at position' + i + 'specified!');
         end
-        %testoutput
-        %size(signal)
-        %t = signal(1,:);
-        %v = signal(2,:);
-        %plot(t,v)
                 
         % END access filter/output
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
