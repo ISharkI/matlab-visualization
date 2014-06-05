@@ -91,6 +91,7 @@ For more information about the loader read documentation.tex
 
 Available Modules
 =====================
+You can save the latest plot and signal if you add a row containing zeroes.
 
 *  1 - delayFilter - Does nothing
 *  2 - simplePlot - Plots the signal
