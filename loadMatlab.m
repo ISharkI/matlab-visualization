@@ -8,7 +8,7 @@
 % 
 
 % BEGIN, main function (loadMatlab)
-function signal = loadMatlab(inputFileLocation)
+function [output] = loadMatlab(inputFileLocation)
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN check input parameters for consistency
@@ -38,8 +38,9 @@ function signal = loadMatlab(inputFileLocation)
     end
     
     % return signal
-    signal = [rot90(t);rot90(v)];
-    
+    signal = rot90(v);
+    sampleDist = t(2)-t(1);
+    output=[sampleDist signal];
     % load file
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end

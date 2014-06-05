@@ -43,7 +43,10 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
     switch loaderModuleNumber
         % Matlab files
         case 1
-            signal = loadMatlab(inputFileLocation);
+            loaded = loadMatlab(inputFileLocation);
+            signal=loaded(2:end);
+            sampleDist=loaded(1);
+            
         % kill script if invalid input occurs
         otherwise
             error('ERROR: No valid loader specified!');
@@ -67,63 +70,94 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
             % time/frequency plot
             case 2
                 % set number of arguments
-                num = [2;0];
+                num = 3;
                 % get argument which plot type
-                type = [ ModuleArray(i,2);  0];
+                type =  ModuleArray(i,2);
                 % get argument which figure
-                figure =[ModuleArray(i,3);0];
-                inputsignal = [num type figure signal];
+                figure =ModuleArray(i,3);
+                inputsignal = [num type figure sampleDist signal];
                 simplePlot(inputsignal);
             % fft or ifft
             case 3
                 % set number of arguments
-                num = [1;0];
+                num = 2;
                 %parameter type
-                type = [ ModuleArray(i,2);  0];
-                inputsignal = [num type signal];
-                signal=fourier(inputsignal);
+                type =  ModuleArray(i,2);
+                inputsignal = [num type sampleDist signal];
+                result=fourier(inputsignal);
+                signal=result(2:end);
+                sampleDist=result(1);
             % blockwise fft
             case 4
                 % set number of arguments
-                num = [1;0];
+                num = 3;
                 %parameter block length
-                length=[ ModuleArray(i,2);  0];
-                inputsignal=[num length signal];
-                signal=fourierBlocks(inputsignal);
+                length=ModuleArray(i,2);
+                % parameter figure
+                figure=ModuleArray(i,3);
+                inputsignal=[num length figure sampleDist signal];
+                fourierBlocks(inputsignal);
             % cutout
             case 5
                 % set number of arguments
-                num = [2;0];
+                num = 2;
                 %parameter start_sample
-                start_sample=[ ModuleArray(i,2);  0];
+                start_sample= ModuleArray(i,2);
                 %parameter end_sample
-                end_sample=[ ModuleArray(i,3);  0];
+                end_sample=ModuleArray(i,3);
                 inputsignal=[num start_sample end_sample signal];
-                signal=fourierBlocks(inputsignal);
+                signal=cutout(inputsignal);
             % pass filter
             case 6
                 % set number of arguments
-                num = [3 ; 0];
+                num = 4;
                 % type
-                type = [ModuleArray(i,2);  0];
+                type = ModuleArray(i,2);
                 % parameter low frequency in Hz
-                lowfreq=[ModuleArray(i,3);  0];
+                lowfreq=ModuleArray(i,3);
                 % parameter high frequency in Hz
-                highfreq=[ModuleArray(i,4);  0];
-                inputsignal=[num type lowfreq highfreq signal];
-                signal=passFilter(inputsignal);
+                highfreq=ModuleArray(i,4);
+                inputsignal=[num type lowfreq highfreq sampleDist signal];
+                result=passFilter(inputsignal);
+                signal=result(2:end);
+                sampleDist=result(1);
             % power spectrum
             case 7
                 % set number of arguments
-                num = [0 ; 0];
-                inputsignal=[num signal];
+                num = 1;
+                inputsignal=[num sampleDist signal];
                 powerSpec=powerSpectrum(inputsignal);
             % audio output
             case 8
                 % set number of arguments
-                num = [0 ; 0];
-                inputsignal=[num signal];
+                num = 1;
+                inputsignal=[num sampleDist signal];
                 audioOutput(inputsignal);
+            % resampling (p/q)
+            case 9
+                % set number of arguments
+                num=3;
+                % parameter p
+                p=ModuleArray(i,2);
+                % parameter q
+                q=ModuleArray(i,3);
+                inputsignal=[num p q sampleDist signal];
+                result=resampling(inputsignal);
+                signal=result(2:end);
+                sampleDist=result(1);
+            case 10
+                % set number of arguments
+                num=3;
+                % parameter direction (0 stands for up)
+                dir=[ModuleArray(i,2);  0];
+                % parameter "distance" in Hz
+                dist=[ModuleArray(i,3);  0];
+                inputsignal=[num dir dist sampleDist signal];
+                result=resampling(inputsignal);
+                signal=result(2:end);
+                sampleDist =result(1);
+                
+            
                 
         %   case 4
         %       % add arguments (limitfrequency)

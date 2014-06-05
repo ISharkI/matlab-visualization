@@ -28,11 +28,12 @@ function outputSignal = passFilter(inputSignal)
     end
     
     % get parameters
-    argsLength = inputSignal(1,1);
-    filterType = inputSignal(1,2);
+    argsLength = inputSignal(1);
+    filterType = inputSignal(2);
+    sampleRate = inputSignal(5);
     
     % check if enough parameters
-    if ~(argsLength == 3)
+    if ~(argsLength == 4)
         error('ERROR: Not enough parameters at passFilter module!');
     end
     
@@ -43,8 +44,8 @@ function outputSignal = passFilter(inputSignal)
         
         
     % get limit frequency
-    limitFrequency1 = inputSignal(1,3);
-    limitFrequency2 = inputSignal(1,4);
+    limitFrequency1 = inputSignal(3);
+    limitFrequency2 = inputSignal(4);
     
     %check if 2>1
     if (filterType == 2 && ~(limitFrequency1 < limitFrequency2))
@@ -52,13 +53,10 @@ function outputSignal = passFilter(inputSignal)
     end
     
     % get signal
-    inputSignal = inputSignal(:,argsLength+2:end);
-    inputSignal = sortrows(inputSignal,2);
-    % row sort changes by snafu reason
-    inputSignal = [inputSignal(2,:); inputSignal(1,:)];
-    frequencySignal = inputSignal(1,:);
-    valueSignal = inputSignal(2,:);
-    
+    valueSignal = inputSignal(argsLength+2:end);
+    [rows columns] = size(inputSignal);
+    frequencySignal = [linspace(-sampleRate/2,sampleRate/2,columns)];
+
     % END check input parameters for consistency
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN signal processing
@@ -76,7 +74,7 @@ function outputSignal = passFilter(inputSignal)
     end
     
     %get both together
-    outputSignal = [frequencySignal; valueSignal];
+    outputSignal = [sampleRate valueSignal];
     
     % END signal processing
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

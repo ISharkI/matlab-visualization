@@ -4,22 +4,23 @@ function [ output ] = resampling( input )
 %   Parameters: p;q
 argsLength=input(1,1);
 
-%y-Achse
-xin=input(1,argsLength+2:end);
-%x-Achse
-yin=input(2,argsLength+2:end);
 
-if argsLength<2
+
+%x-Achse
+yin=input(1,argsLength+2:end);
+
+if argsLength<3
     error('parameter missing')
 end
 %get the parameters
-p=input(1,2);
-q=input(1,3);
+p=input(2);
+q=input(3);
+srin=input(4);
 %resample
-xout=resample(xin,p,q);
+
 yout=resample(yin,p,q);
 %create output
-output=[xout;yout];
+output=[srin*q/p yout];
 
 
 

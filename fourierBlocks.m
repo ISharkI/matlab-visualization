@@ -5,24 +5,23 @@ function [  ] = fourierBlocks( input )
 %   parameters: length of a block;number of figure
 argsLength=input(1,1);
 dim=size(input);
-%y-Achse
-xin=input(1,argsLength+2:end);
-%x-Achse
-yin=input(2,argsLength+2:end);
 
-if argsLength<2
+yin=input(argsLength+2:end);
+
+if argsLength<3
     error('parameter missing')
 end
 blockLength=input(1,2);
 figure(input(1,3));
 NFFT = 2^nextpow2(blockLength);
+srin=input(1,4);
 %how many Blocks can be created
 numberOfBlocks=round((dim(2)-argsLength-1)/blockLength);
 
 %preallocation
 output=zeros(NFFT,numberOfBlocks);
-yout=(1/(2*(xin(2)-xin(1)))) * linspace(-1,1,NFFT);
-xout=linspace(min(xin),max(xin),numberOfBlocks);
+yout=(1/(2*srin)) * linspace(-1,1,NFFT);
+xout=linspace(0,(dim(2)-argsLength-1)*srin,numberOfBlocks);
 for counter=1:numberOfBlocks
     z=fft(yin((blockLength*(counter-1)+1):blockLength*(counter-0.5)),NFFT);
     output(:,counter)=z;

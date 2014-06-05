@@ -8,24 +8,27 @@ function [  ] = simplePlot(  input )
 argsLength=input(1,1);
 
 % check if t least one parameter exists
-if argsLength>=2
-    type=input(1,2);
-    plotNumber=input(1,3);
+if argsLength>=3
+    type=input(2);
+    plotNumber=input(3);
+    srin=input(4);
     
 
     %y-Achse
-    x=input(1,argsLength+2:end);
+    y=input(argsLength+2:end);
     %x-Achse
-    y=input(2,argsLength+2:end);
+
+    
+    
     
     %zeitbereich
     if (type==0)
-        
+        x=linspace(0,length(y)*srin,length(y));
            
     %frequenzbereich
     elseif(type==1)
         y=abs(y);
-        
+        x=0.5*srin*linspace(-1,1,length(y));
     else
         error('parameter out of range');
     end

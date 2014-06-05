@@ -4,22 +4,21 @@ function [ output ] = digitalmix( input )
 
 argsLength=input(1,1);
 
-%y-Achse
-xin=input(1,argsLength+2:end);
-%x-Achse
+
 yin=input(2,argsLength+2:end);
 
-if argsLength<2
+if argsLength<3
     error('parameter missing')
 end
 %get the parameters
 dir=input(1,2);
 dist=input(1,3);
+srin=input(1,4);
 if(dir==0)
-    q=(1/(xin(2)-xin(1)));
+    q=(1/srin);
     p=dist+q;
 elseif (dir==1)
-    q=(1/(xin(2)-xin(1)));
+    q=(1/srin);
     p=q-(dist);
 else
     error('parameter out of range');
@@ -27,10 +26,10 @@ end
 [p,q]=rat(p/q)
 
 %resample
-xout=resample(xin,p,q);
+
 yout=resample(yin,p,q);
 %create output
-output=[xout;yout];
+output=[srin*q/p yout];
 
 
 

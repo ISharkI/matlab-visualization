@@ -23,23 +23,25 @@ function audioOutput(inputSignal)
     end
     
     % get parameters
-    argsLength = inputSignal(1,1);
+    argsLength = inputSignal(1);
     
     % check if enough parameters
-    if ~(argsLength == 0)
-        error('ERROR: To much parameters at audioOutput module!');
+    if (argsLength == 0)
+        error('ERROR: Not enough parameters at audioOutput module!');
+    elseif (argsLength > 0)
+        error('ERROR: Too much parameters at audioOutput module!');
     end
-    
+    sampleDist=inputSignal(2);
     % remove parameter column
-    inputSignal = inputSignal(:,argsLength+2:end);
+    inputSignal = inputSignal(argsLength+2:end);
     
     % END check input parameters for consistency
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN signal processing
     
     % get sample frequency
-    y=inputSignal(2,:);
-    samplerate = 1/(inputSignal(2,1)-inputSignal(1,1));
+    y=inputSignal;
+    samplerate = 1/(sampleDist);
 
     % tune down your speakers baby
     sound(y,samplerate);
