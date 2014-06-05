@@ -46,8 +46,10 @@ function outputSignal = powerSpectrum(inputSignal)
     spectrum = abs(fft(inputSignal,nfft)).^2/dim(2)/samplerate;
     
     % Create a single-sided spectrum
-    outputSignal = dspdata.psd(spectrum(1:length(spectrum)/2),'Fs',samplerate);  
-    plot(outputSignal);
+    powerSpectrum = dspdata.psd(spectrum(1:length(spectrum)/2),'Fs',samplerate);  
+    myplot = figure;
+    plot(powerSpectrum);
+    outputSignal = myplot;
     % END signal processing
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     

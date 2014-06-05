@@ -62,9 +62,18 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
         % BEGIN to access filter/output
         
         switch ModuleArray(i,1)
+            case 0
+                % saves last Plot and signal, so not really a module
+                % save signal
+                h = datestr(clock,0);
+                savename = [h(1:11),'-',h(13:14),'-',h(16:17),'-',h(19:20)];
+                saveas(myplot,strcat(savename,'-Plot'),'fig');
+                saveas(myplot,strcat(savename,'-Plot'),'jpg');
+                % save signal
+                save(strcat(savename,'-Signal.mat'),'sampleDist','signal');              
             % delay filter
             case 1
-                % no arguments needed
+                % no arguments needed'signal.mat'
                 signal = delayFilter(signal);
             
             % time/frequency plot
@@ -126,7 +135,7 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
                 % set number of arguments
                 num = 1;
                 inputsignal=[num sampleDist signal];
-                powerSpec=powerSpectrum(inputsignal);
+                myplot=powerSpectrum(inputsignal);
             % audio output
             case 8
                 % set number of arguments
