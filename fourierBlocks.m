@@ -1,4 +1,4 @@
-function [  ] = fourierBlocks( input )
+function [ output ] = fourierBlocks( input )
 %UNTITLED Summary of this function goes here
 %   divides the input signal into smaller blocks and derives a spectrum of
 %   each blocks. draws the result
@@ -13,11 +13,11 @@ if argsLength<3
 end
 blockLength=input(1,2);
 figure(input(1,3));
-NFFT = 2^nextpow2(blockLength);
+
 srin=input(1,4);
 %how many Blocks can be created
 numberOfBlocks=round((dim(2)-argsLength-1)/blockLength);
-
+NFFT = 2^nextpow2(numberOfBlocks);
 %preallocation
 output=zeros(NFFT,numberOfBlocks);
 yout=(1/(2*srin)) * linspace(-1,1,NFFT);
@@ -27,7 +27,9 @@ for counter=1:numberOfBlocks
     output(:,counter)=z;
     
 end
+output=figure;
 surfc(xout,yout,abs(output))
+zlabel('amplitude');
 xlabel('t(s)');
 ylabel('f(Hz)');
 end

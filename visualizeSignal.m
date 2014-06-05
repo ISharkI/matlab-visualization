@@ -165,7 +165,22 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
                 result=resampling(inputsignal);
                 signal=result(2:end);
                 sampleDist =result(1);
-                
+            case 11
+                % set number of arguments
+                num =1;
+                % get signal length
+                dim=size(signal);
+                le=dim(2);
+                % presently only autocorrelation
+                inputsignal=[num le signal signal];
+                signal=correlation(inputsignal);
+            case 12
+                % set number of arguments
+                num=3;
+                type=ModuleArray(i,2);
+                fig=ModuleArray(i,3);
+                inputsignal=[num type fig sampleDist signal];
+                plotIQ(inputsignal);   
             
                 
         %   case 4
