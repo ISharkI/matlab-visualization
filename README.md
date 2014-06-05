@@ -7,17 +7,19 @@ This program was created at the University of Stuttgart (Germany) during our stu
 
 Authors:
 * Michael Mueller (michael.mueller@sharkarea.net)
-* Jon Schlipf
-* Xudong Gao
+* Jon Schlipf (schlipf.jon@gmx.net)
 
 Furthermore as supervising tutor:
 * Marc Gauger (Marc.Gauger@inue.uni-stuttgart.de)
 
 This program is distributed under the GPLv2 License which can be found at LICENSE.md.
 
+The git repository for this code can furthermore be accessed at https://github.com/ISharkI/matlab-visualization.git
+
 Version
 =====================
-Current Version of this program is 0.02. So far only single channel Signals are supported.
+Current Version of this program is 0.04. So far only one single channel Signal is supported.
+A complete documentation can be found at documentation.tex
 
 Macro Structure
 =====================
@@ -35,7 +37,7 @@ The Supervisor
 =====================
 Currently the supervisor is accessed by the following schema
 
- visualizeSignal(inputFileLocation, [loaderModuleNumber], [ModuleArray])
+ visualizeSignal(inputFileLocation, [loaderModuleNumber, ModuleArray])
 
 The module array is an array with an finite number of modules the
 supervisor will execute consecutiveley in a chain. Therefore the array
@@ -68,16 +70,15 @@ path. (Currently there is only one type of loader
 Modules
 =====================
 The following modules are designed to perform different tasks but
-are sharing a common interface. The Module Interface is an double
+are sharing a common interface. The Module Interface is an single
 row array 
-[[P; 0][P1...PN; 0...0][OrientationSignal;ValueSignal]]
+[[P][P1...PN][SampleRate][ValueSignal]]
 
 Where
 * P - describes the amount of arguments passed to the module (second row is filled with zero) 
 * P1...PN - are the arguments (While N is given in the beginning of the array as P) 
-* OrientationSignal - is the time axis (times where value was recorded) or the frequency axis for transformed signals 
-* ValueSignal - is the signal value corresponding to the respective
-Orientation 
+* SampleRate is the signal sample rate (time domain) or sample frequency (frequency domain)
+* ValueSignal - are the signal values 
 
 This interface is used by the supervisor to call the modules and can
 also be accessed manually for debug purposes. 
@@ -91,10 +92,17 @@ For more information about the loader read documentation.tex
 Available Modules
 =====================
 
-* 1 - delayFilter - Does nothing
-* 2 - simplePlot - Plots the signal
-* 3 - fourier - applies a (inverse) fast fourier transform
-* 4 - fourierBlocks - applies a (inverse) fast fourier transform while the signal is cut into blocks of a specific length
-* 5 - cutout - cuts a specific area out of a signal
+*  1 - delayFilter - Does nothing
+*  2 - simplePlot - Plots the signal
+*  3 - fourier - applies a (inverse) fast fourier transform
+*  4 - fourierBlocks - applies a (inverse) fast fourier transform while the signal is cut into blocks of a specific length
+*  5 - cutout - cuts a specific area out of a signal
+*  6 - passFilter - applies a low/high/bandpass
+*  7 - powerSpectrum - displayes/saves the power spectrum of the signal
+*  8 - audioOutput - outputs the signal using the PC-Speaker (if possible)
+*  9 - resampling - resamples the signal
+* 10 - digitalMixing - mixes the signal
+* 11 - correlation - correlates two signals
+* 12 - plotIQ - Plots an IQ presentation of the signal
 
 For more information about the modules read documentation.tex

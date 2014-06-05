@@ -31,7 +31,7 @@
 \date{University of Stuttgart, 05/20/2014}
 
 
-\author{Gao Xudong, Jon Schlipf, Michael Mueller, Marc Gauger}
+\author{Jon Schlipf, Michael Mueller, Marc Gauger}
 
 \maketitle
 \newpage{}
@@ -58,21 +58,30 @@ is also part of the copyright holders.
 \subsection{Authors}
 \begin{itemize}
 \item Michael Mueller (michael.mueller@sharkarea.net) 
-\item Jon Schlipf 
-\item Gao Xudong
+\item Jon Schlipf (schlipf.jon@gmx.net)
 \end{itemize}
 Furthermore as supervising tutor: 
 \begin{itemize}
 \item Marc Gauger (Marc.Gauger@inue.uni-stuttgart.de) 
 \end{itemize}
 This program is distributed under the GPLv2 License which can be found
-at http://www.gnu.org/licenses/gpl-2.0.html
+at 
+
+\begin{center}
+\textbf{http://www.gnu.org/licenses/gpl-2.0.html}
+\par\end{center}
+
+The git repository for this code can furthermore be accessed at 
+
+\begin{center}
+\textbf{https://github.com/ISharkI/matlab-visualization.git}
+\par\end{center}
 
 
 \subsection{Version}
 
-Current Version of this program is 0.02. So far only single channel
-Signals are supported. 
+Current Version of this program is 0.4. So far only one single channel
+Signal is supported. 
 
 
 \subsubsection{Changelog}
@@ -80,7 +89,9 @@ Signals are supported.
 \item 0.01 - Created the general structure and simple modules (Supervisor,
 Loader, Delay Signal, simplePlot)
 \item 0.02 - Created more modules (fourier, fourierBlocks, cutout, highpass,
-lowpass, bandpass, energy spectrum, resampling, digital merging)
+lowpass, bandpass, energy spectrum, resampling, digital mixing)
+\item 0.03 - Changed the interface between the modules
+\item 0.04 - Created modules (correlation, plotIQ)
 \end{itemize}
 
 \section{Components}
@@ -100,7 +111,7 @@ supervisor. They are used to manipulate the signal or display it.
 
 Currently the supervisor is accessed by the following schema
 \begin{lyxcode}
-visualizeSignal(``inputFileLocation'',{[}loaderModuleNumber{]},{[}ModuleArray{]})
+visualizeSignal(``inputFileLocation'',{[}loaderModuleNumber,~ModuleArray{]})
 \end{lyxcode}
 The module array is an array with an finite number of modules the
 supervisor will execute consecutiveley in a chain. Therefore the array
@@ -132,7 +143,7 @@ in the module chain.
 If no input file type is given Matlab files will be assumed as input.
 Furthermore if no module array is given a ``{[}2 0 1{]}'' will be
 assumed. This means the input is just displayed as a time plot in
-figure 1.
+figure type 1.
 
 
 \subsection{Loader}
@@ -146,21 +157,13 @@ path. (Currently there is only one type of loader
 \subsection{Modules}
 
 The following modules are designed to perform different tasks but
-are sharing a common interface. The Module Interface is an double
+are sharing a common interface. The Module Interface is an single
 row array 
 
 \[
 \left(\begin{array}{ccc}
-\left[\begin{array}{c}
-P\\
-0
-\end{array}\right] & \left[\begin{array}{cccc}
-P_{1} & P_{2} & \ldots & P_{N}\\
-0 & 0 & 0 & 0
-\end{array}\right] & \left[\begin{array}{c}
-OrientationSignal\\
-ValueSignal
-\end{array}\right]\end{array}\right)
+\left[P\right] & \left[P_{1}\ldots P_{N}\right]\left[SampleRate\right] & \left[\begin{array}{c}
+ValueSignal\end{array}\right]\end{array}\right)
 \]
 
 
@@ -170,10 +173,9 @@ Where
 row is filled with zero) 
 \item $P_{1}\ldots P_{N}$ - are the arguments (While N is given in the
 beginning of the array as P) 
-\item OrientationSignal - is the time axis (times where value was recorded)
-or the frequency axis for transformed signals 
-\item ValueSignal - is the signal value corresponding to the respective
-Orientation 
+\item SampleRate is the signal sample rate (time domain) or sample frequency
+(frequency domain)
+\item ValueSignal - are the signal values
 \end{itemize}
 This interface is used by the supervisor to call the modules and can
 also be accessed manually for debug purposes. 
@@ -188,13 +190,13 @@ also be accessed manually for debug purposes.
 \begin{itemize}
 \item Name: \textbf{loadMatlab.m}
 \item Loader number: \textbf{1}
-\item Loads File Type: \textbf{{*}.mat}\end{itemize}
-%
+\item Loads File Type: \textbf{{*}.mat}
+\end{itemize}
+\textbf{Function}: This Loader loads the raw signal from a Matlab
+file which contains two vectors. It assumes ``v'' as the vector
+with the discrete values for each ``t'' vector containing the corresponding
+time values.%
 \end{minipage}}
-
-This Loader loads the raw signal from a Matlab file which contains
-two vectors. It assumes ``v'' as the vector with the discrete values
-for each ``t'' vector containing the corresponding time values.
 
 
 \section{Available Modules}
@@ -218,7 +220,12 @@ output its current state.
 \begin{itemize}
 \item Name: \textbf{delayFilter.m}
 \item Module number: \textbf{1}
-\item Arguments: \textbf{none}
+\item Module type: \textbf{Modifier}
+\item Arguments: \textbf{1}
+
+\begin{itemize}
+\item first argument: sample rate
+\end{itemize}
 \item Function: Does nothing and may be used to wait for other processes.\end{itemize}
 %
 \end{minipage}}
@@ -230,10 +237,11 @@ output its current state.
 \begin{itemize}
 \item Name: \textbf{simplePlot.m}
 \item Module number: \textbf{2}
-\item Arguments: \textbf{2}
+\item Module type: \textbf{Output}
+\item Arguments: 3
 
 \begin{itemize}
-\item first argument: type 
+\item first argument: type
 
 \begin{itemize}
 \item determines how the signal has to be interpreted
@@ -246,6 +254,7 @@ output its current state.
 \end{itemize}
 \item second argument: figure {[}1:n{]} determines in which figure the signal
 is to be plotted 
+\item third argument: sample rate 
 \end{itemize}
 \item Function: Plots a signal in the requested figure. It depends on the
 argument 'type' if the Signal should be recognized as a funcion of
@@ -259,11 +268,12 @@ time or frequency.\end{itemize}
 \shadowbox{\begin{minipage}[t]{1\columnwidth}%
 \begin{itemize}
 \item Name: \textbf{fourier.m}
-\item Module number: \textbf{3}
+\item Module number: 4
+\item Module type: \textbf{Modifier}
 \item Arguments: \textbf{1}
 
 \begin{itemize}
-\item first argument: type 
+\item first argument: type
 
 \begin{itemize}
 \item determines what kind of transformation should be done
@@ -274,6 +284,7 @@ time or frequency.\end{itemize}
 \item 1 - inverse fast fourier transform
 \end{itemize}
 \end{itemize}
+\item second argument: sample rate 
 \end{itemize}
 \item Function: Applies a fast fourier transform or an inverse fast fourier
 transform, depending on the argument ``type''.\end{itemize}
@@ -287,7 +298,8 @@ transform, depending on the argument ``type''.\end{itemize}
 \begin{itemize}
 \item Name: \textbf{fourierBlocks.m}
 \item Module number: \textbf{4}
-\item Arguments: \textbf{1}
+\item Module type: \textbf{Modifier}
+\item Arguments: 2
 
 \begin{itemize}
 \item first argument: block length
@@ -296,6 +308,7 @@ transform, depending on the argument ``type''.\end{itemize}
 \item {[}1:duration of signal{]} determines the length (in samples) of the
 blocks the signal will be divided into
 \end{itemize}
+\item second argument: sample rate
 \end{itemize}
 \item Function: Applies a fast fourier transform or an inverse fast fourier
 transform, depending on the argument ``type''.\end{itemize}
@@ -309,7 +322,8 @@ transform, depending on the argument ``type''.\end{itemize}
 \begin{itemize}
 \item Name: \textbf{cutout.m}
 \item Module number: \textbf{5}
-\item Arguments: \textbf{2}
+\item Module type: \textbf{Modifier}
+\item Arguments: 3
 
 \begin{itemize}
 \item first argument: start sample
@@ -324,6 +338,7 @@ will be cut out
 \item {[}1:endsample{]} determines the end sample of the signal which will
 be cut out
 \end{itemize}
+\item third argument: sample rate
 \end{itemize}
 \item Function: If ``startsample'' is smaller than ``endsample'', all
 samples between the two samples will be returned. If ``startsample''
@@ -331,6 +346,159 @@ is greater than ``endsample'', the function returns the samples
 between startsample and the end of the input signal and the samples
 between the beginning and endsample. If the two arguments are equal,
 the sample at that position will be returned.\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{passFilter}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{passFilter.m}
+\item Module number: \textbf{6}
+\item Module type: \textbf{Modifier}
+\item Arguments: 4
+
+\begin{itemize}
+\item first argument: type of filter
+
+\begin{itemize}
+\item 1 - lowpass
+\item 2 - highpass
+\item 3 - bandpass
+\end{itemize}
+\item second argument: first frequency
+
+\begin{itemize}
+\item limit frequency for low- or highpass, lower limit frequency for bandpass
+\end{itemize}
+\item third argument: second frequency
+
+\begin{itemize}
+\item higher limit frequency for bandpass (ignored for low- or highpass)
+\end{itemize}
+\item fourth argument: sample rate
+\end{itemize}
+\item Function: Applies a pass filter to the signal \end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{powerSpectrum}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{powerSpectrum.m}
+\item Module number: \textbf{7}
+\item Module type: \textbf{Output}
+\item Arguments: 1
+
+\begin{itemize}
+\item first argument: sample rate
+\end{itemize}
+\item Function: Provides the power spectrum as data in return and also displays
+it\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{audioOutput}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{audioOutput.m}
+\item Module number: \textbf{8}
+\item Module type: \textbf{Output}
+\item Arguments: 1
+
+\begin{itemize}
+\item first argument: sample rate
+\end{itemize}
+\item Function: Outputs the signal at the PC speaker (or at least tries
+to)\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{resampling}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{resampling.m}
+\item Module number: \textbf{9}
+\item Module type: \textbf{Modifier}
+\item Arguments: 4
+
+\begin{itemize}
+\item first argument: P (interpolation factor)
+\item second argument: Q (decimation factor)
+\item third argument: sample rate
+\end{itemize}
+\item Function: resamples the signal by the given factors\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{digitalMix}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{resampling.m}
+\item Module number: \textbf{10}
+\item Module type: \textbf{Modifier}
+\item Arguments: 3
+
+\begin{itemize}
+\item first argument: parameter direction
+
+\begin{itemize}
+\item 0 - upstanding
+\item 1 - downstanding
+\end{itemize}
+\item second argument: ``distance'' in Hz
+\item third argument: sample Rate
+\end{itemize}
+\item Function: Mixes the signals\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{correlation}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{correlation.m}
+\item Module number: \textbf{11}
+\item Module type: \textbf{Modifier}
+\item Arguments: 2
+
+\begin{itemize}
+\item first argument: length of the incoming signal
+\item second argument: incoming signal
+\end{itemize}
+\end{itemize}
+Yet it is not supported to provide any Arguments and only the signal
+correlated with itself can be calculated. This will be added later.
+\begin{itemize}
+\item Function: Correlates two signals with each other\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{plotIQ}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{plotIQ.m}
+\item Module number: \textbf{11}
+\item Module type: \textbf{Output}
+\item Arguments: 2
+
+\begin{itemize}
+\item first argument: type of plot
+\item second argument: sample rate
+\end{itemize}
+\item Function: Generates an IQ-Plot of the given signal.\end{itemize}
 %
 \end{minipage}}
 \end{document}
