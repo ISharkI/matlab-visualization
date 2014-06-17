@@ -12,7 +12,7 @@ if argsLength>=3
     type=input(2);
     plotNumber=input(3);
     srin=input(4);
-    out=figure;
+    
 
     %y-Achse
     y=input(argsLength+2:end);

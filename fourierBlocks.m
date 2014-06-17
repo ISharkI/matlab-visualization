@@ -26,8 +26,9 @@ for counter=1:numberOfBlocks
     z=fft(yin((blockLength*(counter-1)+1):blockLength*(counter-0.5)),NFFT);
     output(:,counter)=z;
     
+    
 end
-output=figure;
+
 surfc(xout,yout,abs(output))
 zlabel('amplitude');
 xlabel('t(s)');

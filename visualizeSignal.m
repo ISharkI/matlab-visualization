@@ -83,8 +83,8 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
                 % get argument which plot type
                 type =  ModuleArray(i,2);
                 % get argument which figure
-                figure =ModuleArray(i,3);
-                inputsignal = [num type figure sampleDist signal];
+                fig =ModuleArray(i,3);
+                inputsignal = [num type fig sampleDist signal];
                 simplePlot(inputsignal);
             % fft or ifft
             case 3
@@ -103,8 +103,8 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
                 %parameter block length
                 length=ModuleArray(i,2);
                 % parameter figure
-                figure=ModuleArray(i,3);
-                inputsignal=[num length figure sampleDist signal];
+                fig=ModuleArray(i,3);
+                inputsignal=[num length fig sampleDist signal];
                 fourierBlocks(inputsignal);
             % cutout
             case 5
@@ -158,11 +158,11 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
                 % set number of arguments
                 num=3;
                 % parameter direction (0 stands for up)
-                dir=[ModuleArray(i,2);  0];
+                dir=ModuleArray(i,2);
                 % parameter "distance" in Hz
-                dist=[ModuleArray(i,3);  0];
+                dist=ModuleArray(i,3);
                 inputsignal=[num dir dist sampleDist signal];
-                result=resampling(inputsignal);
+                result=digitalmix(inputsignal);
                 signal=result(2:end);
                 sampleDist =result(1);
             case 11

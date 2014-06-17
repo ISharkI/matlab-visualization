@@ -54,8 +54,8 @@ function outputSignal = passFilter(inputSignal)
     
     % get signal
     valueSignal = inputSignal(argsLength+2:end);
-    [rows columns] = size(inputSignal);
-    frequencySignal = [linspace(-sampleRate/2,sampleRate/2,columns)];
+    [rows, columns] = size(inputSignal);
+    frequencySignal = abs(linspace(-sampleRate/2,sampleRate/2,columns));
 
     % END check input parameters for consistency
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,16 +63,16 @@ function outputSignal = passFilter(inputSignal)
 
     % low pass
     if (filterType == 1)
-        valueSignal(frequencySignal<limitFrequency1) = 0;
+        valueSignal(frequencySignal>limitFrequency1) = 0;
     % high pass
     elseif (filterType == 2)
-        valueSignal(frequencySignal>limitFrequency1) = 0;
+        valueSignal(frequencySignal<limitFrequency1) = 0;
     % bandpass
     elseif (filterType == 3)
         valueSignal(frequencySignal<limitFrequency1) = 0;
         valueSignal(frequencySignal>limitFrequency2) = 0;
     end
-    
+   
     %get both together
     outputSignal = [sampleRate valueSignal];
     

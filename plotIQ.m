@@ -10,10 +10,10 @@ type=input(2);
 fig=input(3);
 sr=input(4);
 sig=input(argsLength+2:end);
-figure(fig);
+ret=figure(fig);
 realsig=real(sig);
 imsig=imag(sig);
-out=figure;
 scatterplot(sig);
+out=ret;
 end
 
