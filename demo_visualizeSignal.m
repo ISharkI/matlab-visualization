@@ -66,6 +66,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
     
     visualizeSignal(inputFileLocation,1,ModuleArray);
     
+    %How to save the last shown plot?
     %saveas(myplot,filename,'jpg');
     %print(filname_output, '-dgif','-S640,480', '-r0');
 
