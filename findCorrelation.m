@@ -1,4 +1,4 @@
-function [ output ] = correlation( inputsig )
+function [ out ] = findCorrelation( inputsig )
 %UNTITLED Summary of this function goes here
 %   parameter: target
 %   0=autocorrelation, 1=short 802.11g training sequence, 2=long 802.11g
@@ -47,10 +47,12 @@ load(str);
     
     % return signal
     sig2 = rot90(v);
-    sampleDist2 = t(2)-t(1);
+    
     
                 end
-output=abs(xcorr(sig1,sig2));
+[result,lags]=(xcorr(sig1,sig2));
+pos = lags(find(abs(result)>=(max(abs(result))*1)));
+out=sig1(pos:end);
 
 end
 

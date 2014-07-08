@@ -168,11 +168,13 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
             case 11
                 % set number of arguments
                 num =1;
-                % get signal length
-                dim=size(signal);
-                le=dim(2);
+                %parameter targ is for second signal(0=autocorr, 1=shortt,
+                %2=longt)
+                targ=ModuleArray(i,2);
+                % correlate with what?
+                
                 % presently only autocorrelation
-                inputsignal=[num le signal signal];
+                inputsignal=[num targ signal];
                 signal=correlation(inputsignal);
             case 12
                 % set number of arguments
@@ -180,7 +182,21 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
                 type=ModuleArray(i,2);
                 fig=ModuleArray(i,3);
                 inputsignal=[num type fig sampleDist signal];
-                plotIQ(inputsignal);   
+                plotIQ(inputsignal); 
+            case 13
+                num=0;
+                signal=findSignal([num signal]);
+            case 14
+                % set number of arguments
+                num =1;
+                %parameter targ is for second signal(0=autocorr, 1=shortt,
+                %2=longt)
+                targ=ModuleArray(i,2);
+                % correlate with what?
+                
+                % presently only autocorrelation
+                inputsignal=[num targ signal];
+                signal=findCorrelation(inputsignal);
             
                 
         %   case 4

@@ -45,7 +45,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,pass,passfilter,pas
         end
     else
         inputFileLocation = uploadfile;
-    endtest
+    end
     
     % get filters
     % default delay... doesn't hurt anyone to wait
@@ -63,7 +63,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,pass,passfilter,pas
     end
     filter
     
-    % check form of visualization
+    % check form of visualization0
     if (strcmp(visual,'time'))
         vis = [2 0 1 0 0 0 0];
     elseif (strcmp(visual,'freq'))

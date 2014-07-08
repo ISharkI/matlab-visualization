@@ -13,7 +13,7 @@ end_sample=input(1,3);
 dim=size(input);
 
 
-yin=input(2,argsLength+2:end);
+yin=input(argsLength+2:end);
 %test several mismatches
 if start_sample<0 || start_sample>dim(2)-argsLength-1 ||end_sample<0 || end_sample>dim(2)-argsLength-1
     error('parameters out of range')

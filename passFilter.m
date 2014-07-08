@@ -13,7 +13,7 @@
 %       1 - lowpass
 %       2 - highpass
 %       3 - bandpass
-% 2. Limit frequency in Hz
+% 2. Lower limit frequency in Hz
 % 3. Higher limit frequency in Hz (for bandpass only, ignored if low or highpass)
 
 % BEGIN, main function (passFilter)

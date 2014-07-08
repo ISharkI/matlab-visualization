@@ -20,11 +20,13 @@ srin=input(4);
 if(dir==0)
     yout=[zeros([1,floor(dist/(srin)*length)]) yin];   
     yout=yout(1:length);
+    %srin=srin+dist;
 else
     yout=[ yin zeros([1,floor(dist/(srin)*length)])];
     [newWidth, newLength]=size(yout);
     tocut=(newLength-length);
     yout=yout(1+tocut:end);
+    %srin=srin+dist;
 
 end
 

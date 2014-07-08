@@ -9,16 +9,16 @@ if (argsLength>=2);
     
     yin=input(argsLength+2:end);
     % NFFT that is a power of 2 increases performance
-    NFFT = 2^nextpow2(length(yin));
+    NFFT = (length(yin));
     if (type==1)
         %do fft
-        yout=fft(yin,NFFT);
+        yout=fftshift(fft(yin,NFFT));
         
         % x-axis from -0.5f_sample to +0.5f_sample
         srout=(1/srin) ;
     elseif(type==0)
         %do ifft
-        yout=ifft(yin,NFFT);
+        yout=ifft(fftshift(yin),NFFT);
         %x-Axis stars from zero
         srout=(1/srin) ;
     else
