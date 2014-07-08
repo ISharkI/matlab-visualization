@@ -12,6 +12,7 @@ sr=input(4);
 sig=input(argsLength+2:end);
 
 %ret=figure(fig);
+axis equal;
 realsig=real(sig);
 imsig=imag(sig);
 plot(sig,'*');
