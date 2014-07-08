@@ -2,7 +2,7 @@
 % EXAMPLE: demo_visualizeSignal(visual,predefined,predefsignal)
 % Converts data from webdemo for visualizeSignal
 
-function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename)
+function demo_visualizeSignal(visual,predefined,predefsignal,pass,passfilter,passlow,passhigh,uploadfile,filename)
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN, set up graphical output
@@ -45,11 +45,22 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
         end
     else
         inputFileLocation = uploadfile;
-    end
+    endtest
     
     % get filters
-    % test
+    % default delay... doesn't hurt anyone to wait
     filter = [1 0 0 0 0 0 0];
+    
+    % passfilter
+    if (pass == 1)
+        if (strcmp(passfilter,'low'))
+            filter = [filter; 6 1 passlow 0 0 0 0];
+        elseif (strcmp(passfilter,'high'))
+            filter = [filter; 6 1 passhigh 0 0 0 0];
+        elseif (strcmp(passfilter,'band'))
+            filter = [filter; 6 1 passlow passhigh 0 0 0];
+        end
+    end
     
     % check form of visualization
     if (strcmp(visual,'time'))
