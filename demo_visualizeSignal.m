@@ -33,11 +33,11 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
     
     % check if own or predefined signal
     if (predefined == 1)
-        if (predefsignal == 'wifi')
+        if (strcmp(predefsignal,'wifi'))
             inputFileLocation = 'eduroam_ch1.mat';
-        elseif (predefsignal == 'signal1')
+        elseif (strcmp(predefsignal,'signal1'))
             echo 'test';
-        elseif (predefsignal == 'signal2')
+        elseif (strcmp(predefsignal,'signal2'))
             echo 'test';
         end
     else
@@ -49,26 +49,29 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
     filter = [1 0 0 0 0 0 0];
     
     % check form of visualization
-    if (visual == 'time')
+    if (strcmp(visual,'time'))
         vis = [2 0 1 0 0 0 0];
-    elseif (visual == 'freq')
+    elseif (strcmp(visual,'freq'))
+        filter = [filter; 3 0 0 0 0 0 0];
         vis = [2 1 1 0 0 0 0];
-    elseif (visual == 'iq')
+    elseif (strcmp(visual,'iq'))
         echo 'test';
+    else
+        vis = [2 0 1 0 0 0 0];
     end
         
     % combine commands to modulearray
     ModuleArray = [filter; vis];
     
      % END prepare parameters for array
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%
    
     
     visualizeSignal(inputFileLocation,1,ModuleArray);
     
     %How to save the last shown plot?
     %saveas(myplot,filename,'jpg');
-    %print(filname_output, '-dgif','-S640,480', '-r0');
+    print(filename, '-dgif','-S640,480', '-r0');
 
 end
 % END main function
