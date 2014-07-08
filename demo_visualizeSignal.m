@@ -61,6 +61,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,pass,passfilter,pas
             filter = [filter; 3 0 0 0 0 0 0; 6 1 passlow passhigh 0 0 0; 3 1 0 0 0 0 0];
         end
     end
+    filter
     
     % check form of visualization
     if (strcmp(visual,'time'))
