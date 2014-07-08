@@ -37,19 +37,15 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
         if (strcmp(predefsignal,'wifi'))
             inputFileLocation = 'eduroam_ch1.mat';
         elseif (strcmp(predefsignal,'signal1'))
-            echo 'test';
-            inputFileLocation = 'elseif1';
+            inputFileLocation = 'signal1';
         elseif (strcmp(predefsignal,'signal2'))
-            echo 'test';
-            inputFileLocation = 'elseif2';
+            inputFileLocation = 'signal2';
         else
-            inputFileLocation = 'else';
+            inputFileLocation = 'eduroam_ch1.mat';
         end
     else
         inputFileLocation = 'uploadfile';%uploadfile;
     end
-    predefsignal
-    inputFileLocation
     
     % get filters
     % test
@@ -66,6 +62,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
     else
         vis = [2 0 1 0 0 0 0];
     end
+    filter
         
     % combine commands to modulearray
     ModuleArray = [filter; vis];
