@@ -69,7 +69,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,pass,passfilter,pas
     elseif (strcmp(visual,'freq'))
         filter = [filter; 3 0 0 0 0 0 0];
         vis = [2 1 1 0 0 0 0];
-    elseif (strcmp(visual,'iq')
+    elseif (strcmp(visual,'iq'))
         vis = [12 1 1 0 0 0 0];
     else
         vis = [2 0 1 0 0 0 0];
