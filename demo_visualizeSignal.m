@@ -71,6 +71,8 @@ function demo_visualizeSignal(visual,predefined,predefsignal,pass,passfilter,pas
         vis = [2 1 1 0 0 0 0];
     elseif (strcmp(visual,'iq'))
         echo 'TBD';
+    elseif (strcmp(visual,'powerspec'))
+        vis = [7 0 0 0 0 0 0];
     else
         vis = [2 0 1 0 0 0 0];
     end
