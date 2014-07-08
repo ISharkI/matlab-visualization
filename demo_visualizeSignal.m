@@ -32,6 +32,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
       
     
     % check if own or predefined signal
+    
     if (predefined == 1)
         if (strcmp(predefsignal,'wifi'))
             inputFileLocation = 'eduroam_ch1.mat';
@@ -40,10 +41,8 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
         elseif (strcmp(predefsignal,'signal2'))
             echo 'test';
         end
-    elseif (predefined == 1)
-        inputFileLocation = uploadfile;
     else
-        inputFileLocation = 'eduroam_ch1.mat';
+        inputFileLocation = uploadfile;
     end
     
     % get filters
