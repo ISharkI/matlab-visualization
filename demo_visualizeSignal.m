@@ -61,7 +61,6 @@ function demo_visualizeSignal(visual,predefined,predefsignal,pass,passfilter,pas
             filter = [filter; 3 0 0 0 0 0 0; 6 1 passlow passhigh 0 0 0; 3 1 0 0 0 0 0];
         end
     end
-    filter
     
     % check form of visualization0
     if (strcmp(visual,'time'))
@@ -70,7 +69,8 @@ function demo_visualizeSignal(visual,predefined,predefsignal,pass,passfilter,pas
         filter = [filter; 3 0 0 0 0 0 0];
         vis = [2 1 1 0 0 0 0];
     elseif (strcmp(visual,'iq'))
-        vis = [12 1 0 0 0 0 0];
+        filter = [filter; 3 0 0 0 0 0 0];
+        vis = [12 0 0 0 0 0 0];
     else
         vis = [2 0 1 0 0 0 0];
     end
