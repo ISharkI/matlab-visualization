@@ -14,7 +14,7 @@ sig=input(argsLength+2:end);
 %ret=figure(fig);
 realsig=real(sig);
 imsig=imag(sig);
-scatterplot(sig);
+plot(sig,'*');
 %out=ret;
 end
 
