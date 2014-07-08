@@ -48,6 +48,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
     else
         inputFileLocation = 'uploadfile';%uploadfile;
     end
+    predefsignal
     inputFileLocation
     
     % get filters
