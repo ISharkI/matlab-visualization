@@ -44,7 +44,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
             inputFileLocation = 'eduroam_ch1.mat';
         end
     else
-        inputFileLocation = 'uploadfile';%uploadfile;
+        inputFileLocation = uploadfile;
     end
     
     % get filters
@@ -58,11 +58,10 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
         filter = [filter; 3 0 0 0 0 0 0];
         vis = [2 1 1 0 0 0 0];
     elseif (strcmp(visual,'iq'))
-        echo 'test';
+        echo 'TBD';
     else
         vis = [2 0 1 0 0 0 0];
     end
-    filter
         
     % combine commands to modulearray
     ModuleArray = [filter; vis];
