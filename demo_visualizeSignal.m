@@ -40,8 +40,10 @@ function demo_visualizeSignal(visual,predefined,predefsignal,uploadfile,filename
         elseif (strcmp(predefsignal,'signal2'))
             echo 'test';
         end
-    else
+    elseif (predefined == 1)
         inputFileLocation = uploadfile;
+    else
+        inputFileLocation = 'eduroam_ch1.mat';
     end
     
     % get filters
