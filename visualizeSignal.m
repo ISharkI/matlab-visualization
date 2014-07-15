@@ -27,8 +27,10 @@ function visualizeSignal(inputFileLocation,ModuleArray,loaderModuleNumber,sample
     end
     
     % check if samplerate is set, assume default sample rate 44100 (audio) if not
-    if loaderModuleNumber == 2 and ~exist('samplerate','var')
-        error('ERROR: No samplerate found!');
+    if loaderModuleNumber == 2 
+        if ~exist('samplerate','var')
+            error('ERROR: No samplerate found!');
+        end
     else
         sampleDist=samplerate;
     end
