@@ -2,7 +2,7 @@
 % EXAMPLE: demo_visualizeSignal(visual,predefined,predefsignal)
 % Converts data from webdemo for visualizeSignal
 
-function demo_visualizeSignal(visual,predefined,predefsignal,pass,passfilter,passlow,passhigh,uploadfile,filename)
+function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,passfilter,passlow,passhigh,uploadfile,filename)
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN, set up graphical output
@@ -30,6 +30,11 @@ function demo_visualizeSignal(visual,predefined,predefsignal,pass,passfilter,pas
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN prepare parameters for array
       
+    % check if samplerate is set, assume default sample rate 44100 (audio) if not
+    % set
+    if ~exist('samplerate','var')
+        samplerate = 44100;
+    end
     
     % check if own or predefined signal
     
@@ -82,7 +87,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,pass,passfilter,pas
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%
    
     
-    visualizeSignal(inputFileLocation,1,ModuleArray);
+    visualizeSignal(inputFileLocation,ModuleArray,2,samplerate);
     
     %How to save the last shown plot?
     %saveas(myplot,filename,'jpg');

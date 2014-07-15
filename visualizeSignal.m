@@ -1,21 +1,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% EXAMPLE: visualizeSignal("inputFileLocation", [loaderModuleNumber], [ModuleArray])
+% EXAMPLE: visualizeSignal("inputFileLocation", [ModuleArray], [loaderModuleNumber], [sampleRate])
 % Parameters
 %   inputFileLocation               defines location of file to load
 % 
 % Optional Parameters
-%   loaderModuleNumber              number of loader module
 %   ModuleArray                     array of output modules, filters and their values to be executed
 %                                   each row consists out ouf one column
 %                                   for the output/filter and the following columns for the
 %                                   parameters
+%   loaderModuleNumber              number of loader module (optional, if no number is given "1" will be assumed)
+%   samplerate                      samplerate of the signal (mandatory for the CSV-loader, otherwise ignored)
 
 % examplesy
-% display input signal from m file: visualizeSignal(example.m)
-% display signal after low pass:    visualizeSignal(1, example.m, [2 1])
+% display input signal from example file as time domain: visualizeSignal(example.m)
 
 % BEGIN, main function (supervisor)
-function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
+function visualizeSignal(inputFileLocation,ModuleArray,loaderModuleNumber,samplerate)
 
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -24,6 +24,13 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
     % check if loader is chosen and set matlab loader if not given
     if ~exist('loaderModuleNumber','var')
         loaderModuleNumber = 1;
+    end
+    
+    % check if samplerate is set, assume default sample rate 44100 (audio) if not
+    if loaderModuleNumber == 2 and ~exist('samplerate','var')
+        error('ERROR: No samplerate found!');
+    else
+        sampleDist=samplerate;
     end
     
     % check if array is set
@@ -46,6 +53,11 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
             loaded = loadMatlab(inputFileLocation);
             signal=loaded(2:end);
             sampleDist=loaded(1);
+            
+        % CSV files
+        case 2
+            loaded = loadCsv(inputFileLocation);
+            signal=loaded;
             
         % kill script if invalid input occurs
         otherwise
@@ -197,13 +209,7 @@ function visualizeSignal(inputFileLocation,loaderModuleNumber,ModuleArray)
                 % presently only autocorrelation
                 inputsignal=[num targ signal];
                 signal=findCorrelation(inputsignal);
-            
-                
-        %   case 4
-        %       % add arguments (limitfrequency)
-        %       params = [ 1 ModuleArray(i,3); 0 0];
-        %       signal = [ params signal];
-        %       signal = highFilter(signal);
+
             % kill script if invalid input occurs
             otherwise
                 error('ERROR: No valid filter at position' + i + 'specified!');
