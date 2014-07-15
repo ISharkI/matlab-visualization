@@ -4,6 +4,7 @@
 \setlength{\parindent}{0cm}
 \usepackage{fancybox}
 \usepackage{calc}
+\usepackage{graphicx}
 
 \makeatletter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
@@ -28,7 +29,7 @@
 \title{Matlab Visualization}
 
 
-\date{University of Stuttgart, 05/20/2014}
+\date{University of Stuttgart, 2014}
 
 
 \author{Jon Schlipf, Michael Mueller, Marc Gauger}
@@ -43,19 +44,21 @@
 During our Studies at the University of Stuttgart we created a Matlab
 Script to visualize the Input of different Signals. This can be used
 to verify a correct recording of a signal in an experimental environment
-but can also be used to manipulate the signal or display it in different
+but can also be used to manipulate the signal to display it in different
 ways.
 \end{abstract}
 
 \section{Introduction}
 
 This software was created to analyze raw signal of all kinds but especially
-radio frequency signals at the University of Stuttgart (Germany) during
-our studies. Therefore besides the authors the University of Stuttgart
-is also part of the copyright holders.
+radio frequency signals. It was developed at the University of Stuttgart
+(Germany) during our studies. Therefore besides the authors the University
+of Stuttgart is also part of the copyright holders. The Script was
+mainly developed for Matlab but can also be used under Octave. For
+exceptions see \ref{sub:Exceptions-for-Octave}.
 
 
-\subsection{Authors}
+\subsection{Authors, License and Code}
 \begin{itemize}
 \item Michael Mueller (michael.mueller@sharkarea.net) 
 \item Jon Schlipf (schlipf.jon@gmx.net)
@@ -71,7 +74,7 @@ at
 \textbf{http://www.gnu.org/licenses/gpl-2.0.html}
 \par\end{center}
 
-The git repository for this code can furthermore be accessed at 
+The Git Repository for this code can furthermore be accessed at 
 
 \begin{center}
 \textbf{https://github.com/ISharkI/matlab-visualization.git}
@@ -80,8 +83,8 @@ The git repository for this code can furthermore be accessed at
 
 \subsection{Version}
 
-Current Version of this program is 0.4. So far only one single channel
-Signal is supported. 
+Current (07/15/2014) Version of this program is 0.11. So far only
+one single channel Signal is supported. 
 
 
 \subsubsection{Changelog}
@@ -92,6 +95,17 @@ Loader, Delay Signal, simplePlot)
 lowpass, bandpass, energy spectrum, resampling, digital mixing)
 \item 0.03 - Changed the interface between the modules
 \item 0.04 - Created modules (correlation, plotIQ)
+\item 0.1 - Added WebDemo for lessons
+\item 0.11 - New versions of modules, new modules (findcorrelation, findsignal)
+and a wifi-example
+\end{itemize}
+
+\subsection{Exceptions for Octave\label{sub:Exceptions-for-Octave}}
+
+Currently the following exceptions for ``not working'' under Octave
+are
+\begin{itemize}
+\item PowerSpectrum Module - as it refferes to third party Matlab files.
 \end{itemize}
 
 \section{Components}
@@ -106,12 +120,21 @@ accessed by the user.
 output) which can be consecutively added and walked through by the
 supervisor. They are used to manipulate the signal or display it. 
 \end{itemize}
+\begin{figure}
+\includegraphics[scale=0.3]{macrostructure}
 
-\subsection{the Supervisor}
+\caption{Macro structure of the program}
+
+
+\end{figure}
+
+
+
+\subsection{Supervisor}
 
 Currently the supervisor is accessed by the following schema
 \begin{lyxcode}
-visualizeSignal(``inputFileLocation'',{[}loaderModuleNumber,~ModuleArray{]})
+visualizeSignal(``inputFileLocation'',~{[}ModuleArray{]},~{[}loaderModuleNumber{]},~{[}SampleRate{]})
 \end{lyxcode}
 The module array is an array with an finite number of modules the
 supervisor will execute consecutiveley in a chain. Therefore the array
@@ -151,7 +174,7 @@ figure type 1.
 ``Loader'' are modules used to import raw data for processing within
 the supervisor. Each Loader is designed to import data from a specific
 file type. They access the file through its file name or a directory
-path. (Currently there is only one type of loader
+path.
 
 
 \subsection{Modules}
@@ -196,6 +219,22 @@ also be accessed manually for debug purposes.
 file which contains two vectors. It assumes ``v'' as the vector
 with the discrete values for each ``t'' vector containing the corresponding
 time values.%
+\end{minipage}}
+
+
+\subsection{loadCsv}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{loadCsv.m}
+\item Loader number: 2
+\item Loads File Type: \textbf{{*}.csv}
+\end{itemize}
+\textbf{Function}: This Loader loads the signal from a CSV file which
+contains the discrete values for each point of time. 
+
+\textbf{Note}: If you use this Loader you need to give a sample rate
+in the beginning.%
 \end{minipage}}
 
 
@@ -400,8 +439,9 @@ the sample at that position will be returned.\end{itemize}
 \item first argument: sample rate
 \end{itemize}
 \item Function: Provides the power spectrum as data in return and also displays
-it\end{itemize}
-%
+it
+\end{itemize}
+\textbf{Note:} This Module will not work with Octave.%
 \end{minipage}}
 
 
@@ -493,7 +533,7 @@ correlated with itself can be calculated. This will be added later.
 \shadowbox{\begin{minipage}[t]{1\columnwidth}%
 \begin{itemize}
 \item Name: \textbf{plotIQ.m}
-\item Module number: \textbf{11}
+\item Module number: \textbf{12}
 \item Module type: \textbf{Output}
 \item Arguments: 2
 
@@ -504,4 +544,68 @@ correlated with itself can be calculated. This will be added later.
 \item Function: Generates an IQ-Plot of the given signal.\end{itemize}
 %
 \end{minipage}}
+
+
+\section{Interface for Lessons}
+
+We also created an interface (``webdemo'') for lessons so the programm
+can be used in a ``quick and easy'' access. It is located at
+
+\begin{center}
+\textbf{http://webdemo.inue.uni-stuttgart.de/webdemos\_mgauger/06\_teamarbeit/visualizeSignal/index.php}
+\par\end{center}
+
+For this webdemo we simplified the program to fit it into the interface
+and created a connection between the demo and the main program. The
+User is only capable of adding a mixture of given filters though the
+demo. Furthermore we added the possibility to upload your own signal
+or use a predefined signal. 
+
+Restrictions for the Fileupload are:
+\begin{itemize}
+\item Samplerate is known
+\item CSV-File
+\item File is not larger than 2MB
+\end{itemize}
+Using the complete Program you would be able to apply hundreds of
+filters after each other, save the states as files or display more
+than one plot at a time. To keep it simple we reduced it to the following
+filters
+\begin{itemize}
+\item Pass-Filter (Low-/High-/Bandpass)
+\item TBD
+\end{itemize}
+Possible predefined signals to chose are: 
+\begin{itemize}
+\item An Wireless Signal (Channel 1)
+\item TBD
+\end{itemize}
+For output you can choose between:
+\begin{itemize}
+\item time domain
+\item frequency domain
+\item IQ demodulation.
+\end{itemize}
+
+\subsection{Usage}
+\begin{enumerate}
+\item Decide if you want to get the Output as time or frequency domain or
+as IQ demodulation
+\item Decide if you want to use a predefined Signal. If yes, keep the Box
+checked and choose from the dropdown. If you want to use your own
+Signal, remove the checked Box and get ``Choose File'' to get a
+File from your own PC. Please note: You need to know the Samplerate
+and the CSV-File is not larger than 2MB.
+\item Check the filters you want to use
+
+\begin{enumerate}
+\item Pass-Filter
+
+
+If you want to use a Pass-Filter chose which one you want to use.
+Insert the border frequencies into the boxes in Hz.
+
+\end{enumerate}
+\item TBD\end{enumerate}
+
 \end{document}
