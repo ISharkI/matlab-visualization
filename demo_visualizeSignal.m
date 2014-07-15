@@ -86,8 +86,11 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
      % END prepare parameters for array
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%
    
-    
-    visualizeSignal(inputFileLocation,ModuleArray,2,samplerate);
+    if (predefined == 1)
+        visualizeSignal(inputFileLocation,ModuleArray,1);
+    else
+        visualizeSignal(inputFileLocation,ModuleArray,2,samplerate);
+    end
     
     %How to save the last shown plot?
     %saveas(myplot,filename,'jpg');
