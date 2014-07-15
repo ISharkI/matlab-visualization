@@ -31,8 +31,6 @@ function visualizeSignal(inputFileLocation,ModuleArray,loaderModuleNumber,sample
         if ~exist('samplerate','var')
             error('ERROR: No samplerate found!');
         end
-    else
-        sampleDist=samplerate;
     end
     
     % check if array is set
