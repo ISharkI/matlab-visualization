@@ -33,7 +33,9 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     % check if samplerate is set, assume default sample rate 44100 (audio) if not
     % set
     if ~exist('samplerate','var')
-        samplerate = 44100;
+        samplerate = 0.00002;
+    else
+        samplerate = 1/samplerate;
     end
     
     % check if own or predefined signal
