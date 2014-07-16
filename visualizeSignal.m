@@ -58,6 +58,7 @@ function visualizeSignal(inputFileLocation,ModuleArray,loaderModuleNumber,sample
         case 2
             loaded = loadCsv(inputFileLocation);
             signal=loaded;
+            sampleDist=samplerate;
             
         % kill script if invalid input occurs
         otherwise
