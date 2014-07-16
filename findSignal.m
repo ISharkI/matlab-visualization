@@ -1,49 +1,49 @@
 function [ signal ] = findSignal( input )
 %UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%   finds and returns the SIGNAL part of the first (2412kHz) band of an 802.11g WLAN sample
+%   requires a signal that is already mixed down by 2,4GHz
+
+%get parameters
 args=input(1);
-
-
-
-
-
-inpsig=input(args+2:end);
+if (args<1)
+    error('not enough arguments')
+end
+sr=input(2)
+inpsig=input(args+3:end);
+%length of the input signal is needed
+[width,length]=size(inpsig);
+%mix the signal down with 12 kHZ
+inpsig=inpsig.*exp(1i*2*pi*sr.*(1:length)*(-12000000));
+%apply lowpass filtering (this is only a workaround)
+inpsig=resample(resample(inpsig,1,10),10,1);
+%load the standard training sequency in frequency and time domain
 load('longt.mat');
 load('longf.mat');
-inpsig = resample(inpsig,1,2);
+%resample the signal to 10^8 Samples per second
+[p,q]=rat(sr*10^8)
+inpsig = resample(inpsig,p,q);
+%reshape the training sequence to 10^8 Samples per second
 t_seq=reshape(longt,1,161);
 t_seq=resample(t_seq,5,1);
+%correlate signal with training sequence
 [result,lags]=xcorr(inpsig,t_seq);
-figure(17);
-plot(abs(result));
-pos = lags(find(abs(result)>=(max(abs(result))*1)));
-[l w]=size(pos)
-for (i=1:w)
-figure(20+i);
-rec_long1=fftshift(fft(resample(inpsig(pos(i)+160+1:pos(i)+160+320),1,5)));
-rec_long2=fftshift(fft(resample(inpsig(pos(i)+160+320+1:pos(i)+160+320+320),1,5)));
-figure(1);
-plot(abs(rec_long1),'*');
-figure(2);
-plot(abs(rec_long2),'*');
-receivedLong=rec_long1;%(0.5*(rec_long1+rec_long2));
+%find maximum of correlation
+pos = lags((abs(result)>=(max(abs(result))*1)))
+
+%check the received long training sequence
+rec_long1=fftshift(fft(resample(inpsig(pos(1)+160+1:pos(1)+160+320),1,5)));
+rec_long2=fftshift(fft(resample(inpsig(pos(1)+160+320+1:pos(1)+160+320+320),1,5)));
+%compare it to the standard
+receivedLong=(0.5*(rec_long1+rec_long2));
 channelinv=diag(longf./receivedLong);
-sig = fftshift(fft(resample(inpsig(pos(i)+160+320+320+80+1:pos(i)+160+320+320+80+320),1,5)));
-figure(3);
-plot(abs(sig),'*');
+%find the signal field
+sig = fftshift(fft(resample(inpsig(pos(1)+160+320+320+80+1:pos(1)+160+320+320+80+320),1,5)));
 
+%correct the signal field using the channel matrix
 sig_korr = channelinv*sig';
-figure(4);
-plot(abs(sig_korr),'*');
 
-figure(5);
-plot(sig_korr,'*');
 
-end
-%figure(100);
-%plot(fft(inpsig(pos(1)+161:pos(1)+161+63)),'*');
-%figure(101);
-%plot(linspace(1,64,64),imag(inpsig(pos(1)+161:pos(1)+161+63)));
-signal=result;
+
+signal=sig_korr';
 end
 

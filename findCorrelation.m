@@ -51,7 +51,7 @@ load(str);
     
                 end
 [result,lags]=(xcorr(sig1,sig2));
-pos = lags(find(abs(result)>=(max(abs(result))*1)));
+pos = lags(abs(result)>=(max(abs(result))*1));
 out=sig1(pos:end);
 
 end

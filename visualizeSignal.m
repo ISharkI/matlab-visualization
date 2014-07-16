@@ -196,8 +196,8 @@ function visualizeSignal(inputFileLocation,ModuleArray,loaderModuleNumber,sample
                 inputsignal=[num type fig sampleDist signal];
                 plotIQ(inputsignal); 
             case 13
-                num=0;
-                signal=findSignal([num signal]);
+                num=1;
+                signal=findSignal([num sampleDist signal]);
             case 14
                 % set number of arguments
                 num =1;
