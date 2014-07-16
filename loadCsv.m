@@ -22,7 +22,7 @@ function [output] = loadCsv(inputFileLocation)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN load file
     
-    signal = csvread(filename);
+    signal = csvread(inputFileLocation);
     
     % return signal
     output=[signal];
