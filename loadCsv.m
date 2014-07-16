@@ -25,6 +25,7 @@ function [output] = loadCsv(inputFileLocation)
     signal = csvread(inputFileLocation);
     
     % return signal
+    signal = rot90(signal);
     output=[signal];
     % load file
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
