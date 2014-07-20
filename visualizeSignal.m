@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% EXAMPLE: visualizeSignal("inputFileLocation", [ModuleArray], [loaderModuleNumber], [sampleRate])
+% EXAMPLE: visualizeSignal([ModuleArray], "inputFileLocation", [loaderModuleNumber], [sampleRate])
 % Parameters
 %   inputFileLocation               defines location of file to load
 % 
@@ -15,7 +15,7 @@
 % display input signal from example file as time domain: visualizeSignal(example.m)
 
 % BEGIN, main function (supervisor)
-function visualizeSignal(inputFileLocation,ModuleArray,loaderModuleNumber,samplerate)
+function visualizeSignal(ModuleArray,inputFileLocation,loaderModuleNumber,samplerate)
 
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -132,17 +132,17 @@ function visualizeSignal(inputFileLocation,ModuleArray,loaderModuleNumber,sample
             % pass filter
             case 6
                 % set number of arguments
-                num = 4;
+                num = 5;
                 % type
                 type = ModuleArray(i,2);
                 % parameter low frequency in Hz
                 lowfreq=ModuleArray(i,3);
                 % parameter high frequency in Hz
                 highfreq=ModuleArray(i,4);
-                inputsignal=[num type lowfreq highfreq sampleDist signal];
+                domain=ModuleArray(i,5);
+                inputsignal=[num type lowfreq highfreq sampleDist domain signal];
                 result=passFilter(inputsignal);
-                signal=result(2:end);
-                sampleDist=result(1);
+                signal=result;
             % power spectrum
             case 7
                 % set number of arguments
@@ -167,6 +167,7 @@ function visualizeSignal(inputFileLocation,ModuleArray,loaderModuleNumber,sample
                 result=resampling(inputsignal);
                 signal=result(2:end);
                 sampleDist=result(1);
+            % digital mixing
             case 10
                 % set number of arguments
                 num=3;
@@ -178,6 +179,7 @@ function visualizeSignal(inputFileLocation,ModuleArray,loaderModuleNumber,sample
                 result=digitalmix(inputsignal);
                 signal=result(2:end);
                 sampleDist =result(1);
+            % correlation
             case 11
                 % set number of arguments
                 num =1;
@@ -189,16 +191,17 @@ function visualizeSignal(inputFileLocation,ModuleArray,loaderModuleNumber,sample
                 % presently only autocorrelation
                 inputsignal=[num targ signal];
                 signal=correlation(inputsignal);
+            % IQ Plot
             case 12
                 % set number of arguments
-                num=3;
-                type=ModuleArray(i,2);
-                fig=ModuleArray(i,3);
-                inputsignal=[num type fig sampleDist signal];
-                plotIQ(inputsignal); 
+                inputsignal=[1 signal];
+                plotIQ(inputsignal);
+            % find signal   
             case 13
                 num=1;
-                signal=findSignal([num sampleDist signal]);
+                signal=findSignal([num sampleD
+                ist signal]);
+            % find correlation
             case 14
                 % set number of arguments
                 num =1;

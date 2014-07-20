@@ -36,24 +36,24 @@
 
 \maketitle
 \newpage{}
-
-\tableofcontents{}
-
-\newpage{}
 \begin{abstract}
-During our Studies at the University of Stuttgart we created a Matlab
-Script to visualize the Input of different Signals. This can be used
+During our studies at the University of Stuttgart we created a Matlab
+script to visualize the input of different Signals. This can be used
 to verify a correct recording of a signal in an experimental environment
 but can also be used to manipulate the signal to display it in different
 ways.
 \end{abstract}
+\newpage{}
+
+\tableofcontents{}\newpage{}
+
 
 \section{Introduction}
 
 This software was created to analyze raw signal of all kinds but especially
 radio frequency signals. It was developed at the University of Stuttgart
 (Germany) during our studies. Therefore besides the authors the University
-of Stuttgart is also part of the copyright holders. The Script was
+of Stuttgart is also part of the copyright holders. The script was
 mainly developed for Matlab but can also be used under Octave. For
 exceptions see \ref{sub:Exceptions-for-Octave}.
 
@@ -99,18 +99,20 @@ lowpass, bandpass, energy spectrum, resampling, digital mixing)
 \item 0.11 - New versions of modules, new modules (findcorrelation, findsignal)
 and a wifi-example
 \end{itemize}
+\newpage{}
+
 
 \subsection{Exceptions for Octave\label{sub:Exceptions-for-Octave}}
 
-Currently the following exceptions for ``not working'' under Octave
-are
+Currently the following exceptions are known for ``not working''
+under Octave are
 \begin{itemize}
 \item PowerSpectrum Module - as it refferes to third party Matlab files.
 \end{itemize}
 
 \section{Components}
 
-The software consists of three parts 
+The software consists of three parts as shown in Figure \ref{fig:Macro-structure-of}
 \begin{itemize}
 \item The ``Supervisor'' is the supervising engine and controls the combination
 of the modules. It is the only part of this program which can be directly
@@ -123,7 +125,7 @@ supervisor. They are used to manipulate the signal or display it.
 \begin{figure}
 \includegraphics[scale=0.3]{macrostructure}
 
-\caption{Macro structure of the program}
+\caption{Macro structure of the program\label{fig:Macro-structure-of}}
 
 
 \end{figure}
@@ -134,23 +136,29 @@ supervisor. They are used to manipulate the signal or display it.
 
 Currently the supervisor is accessed by the following schema
 \begin{lyxcode}
-visualizeSignal(``inputFileLocation'',~{[}ModuleArray{]},~{[}loaderModuleNumber{]},~{[}SampleRate{]})
+visualizeSignal(ModuleArray,~``inputFileLocation'',~{[}loaderModuleNumber{]},~{[}SampleRate{]})
 \end{lyxcode}
-The module array is an array with an finite number of modules the
-supervisor will execute consecutiveley in a chain. Therefore the array
-has N rows for N Modules. Each row consists out of two parts
+In this schema the module array is an command array with an finite
+number of filters (and their arguments) which the supervisor will
+execute consecutiveley in a chain (See figure \ref{fig:Sequence}).
+So it is just a list of commands which will passed to the modules
+through the module interface later (See section \ref{sub:Modules}).
+
+Therefore of course the array has N rows for N Modules. Each row consists
+out of two parts
 \begin{itemize}
-\item The first element contains the module number (modifier or output,
-mapping can be found below)
-\item The following elements contain the parameters for each module. If
-no arguments are needed it can be filled up with anything (e.g. zeroes).
-Parameters that are not needed by the respective module will just
-be ignored.
+\item The first element contains the module number (See section \ref{sec:Available-Modules})
+\item The following elements contain the parameters for each module (See
+section \ref{sec:Available-Modules} for the list). If no arguments
+are needed or you need to fill the line up to get a complete array
+it can be filled up with anything (e.g. zeroes). Parameters that are
+not needed by the respective module will just be ignored.
 \end{itemize}
 Example:
 
 \[
 \left(\begin{array}{ccccc}
+Module\, Number & Number\, of\, Parameters & Parameter\,1 & Parameter\,2 & ...\\
 2 & 0 & 1 & 0 & 0\\
 1 & 0 & 0 & 0 & 0\\
 \ldots & \ldots & \ldots & \ldots & \ldots\\
@@ -159,25 +167,43 @@ Example:
 \]
 
 
-By using the same interface for both module types (output modules
-and filters modules), the user can display the output at any point
-in the module chain.
+By using the same interface for all module types (output, filter,
+...), the user can display the output at any point in the module chain.\\
 
-If no input file type is given Matlab files will be assumed as input.
+
+The ``loader module number'' is the number of the loader you want
+to use (See section \ref{sub:Loader} and \ref{sec:Available-Loader}).
+As the argument is optional the default is to load a Matlab file.
+\\
+
+
 Furthermore if no module array is given a ``{[}2 0 1{]}'' will be
-assumed. This means the input is just displayed as a time plot in
-figure type 1.
+assumed. This means the input is just displayed as a time plot without
+modifications.
+
+\begin{center}
+\begin{figure}
+\begin{centering}
+\includegraphics[scale=0.3]{sequence_full}
+\par\end{centering}
+
+\caption{Sequence of the program\label{fig:Sequence}}
 
 
-\subsection{Loader}
+\end{figure}
+
+\par\end{center}
+
+
+\subsection{Loader\label{sub:Loader}}
 
 ``Loader'' are modules used to import raw data for processing within
 the supervisor. Each Loader is designed to import data from a specific
-file type. They access the file through its file name or a directory
+file type. They access the file through its file name and directory
 path.
 
 
-\subsection{Modules}
+\subsection{Modules\label{sub:Modules}}
 
 The following modules are designed to perform different tasks but
 are sharing a common interface. The Module Interface is an single
@@ -185,17 +211,17 @@ row array
 
 \[
 \left(\begin{array}{ccc}
-\left[P\right] & \left[P_{1}\ldots P_{N}\right]\left[SampleRate\right] & \left[\begin{array}{c}
+\left[N\right] & \left[P_{1}\ldots P_{N}\right]\left[SampleRate\right] & \left[\begin{array}{c}
 ValueSignal\end{array}\right]\end{array}\right)
 \]
 
 
 Where 
 \begin{itemize}
-\item P - describes the amount of arguments passed to the module (second
+\item N - describes the amount of arguments passed to the module (second
 row is filled with zero) 
 \item $P_{1}\ldots P_{N}$ - are the arguments (While N is given in the
-beginning of the array as P) 
+beginning of the array) 
 \item SampleRate is the signal sample rate (time domain) or sample frequency
 (frequency domain)
 \item ValueSignal - are the signal values
@@ -204,10 +230,10 @@ This interface is used by the supervisor to call the modules and can
 also be accessed manually for debug purposes. 
 
 
-\section{Available Loader}
+\section{Available Loader\label{sec:Available-Loader}}
 
 
-\subsection{loadMatlab}
+\subsection{loadMatlab\label{sub:loadMatlab}}
 
 \shadowbox{\begin{minipage}[t]{1\columnwidth}%
 \begin{itemize}
@@ -238,7 +264,7 @@ in the beginning.%
 \end{minipage}}
 
 
-\section{Available Modules}
+\section{Available Modules\label{sec:Available-Modules}}
 
 We differentiate between two kind of Modules:
 \begin{itemize}
@@ -251,10 +277,12 @@ transforming the signal to another domain. This information will not
 be saved, so the sequence of the modules is important.
 \item ``Output Modules'' do not manipulate the signal, but display or
 output its current state. 
+\item Furthermore there is a ``Module'' to save your data (Module number
+0 without arguments). So the last Plot and the last processed Signal
+will be saved if you add an array of zeroes in between the modules.
+Using this module it will generate an JPG, an FIG and a MAT File containing
+the last plot and the current data.
 \end{itemize}
-The last Plot and the last processed Signal will be saved if you add
-an array of zeroes in between the modules.
-
 
 \subsection{delayFilter}
 
@@ -263,12 +291,9 @@ an array of zeroes in between the modules.
 \item Name: \textbf{delayFilter.m}
 \item Module number: \textbf{1}
 \item Module type: \textbf{Modifier}
-\item Arguments: \textbf{1}
-
-\begin{itemize}
-\item first argument: sample rate
-\end{itemize}
-\item Function: Does nothing and may be used to wait for other processes.\end{itemize}
+\item Arguments: 0
+\item Function: Does nothing and may be used to wait for other processes/signals
+etc.\end{itemize}
 %
 \end{minipage}}
 
@@ -278,7 +303,7 @@ an array of zeroes in between the modules.
 \shadowbox{\begin{minipage}[t]{1\columnwidth}%
 \begin{itemize}
 \item Name: \textbf{simplePlot.m}
-\item Module number: \textbf{2}
+\item Module number: 2
 \item Module type: \textbf{Output}
 \item Arguments: 3
 
@@ -286,21 +311,23 @@ an array of zeroes in between the modules.
 \item first argument: type
 
 \begin{itemize}
-\item determines how the signal has to be interpreted
+\item determines how the signal should be plottet
 \item possible values:
 
 \begin{itemize}
 \item 0 - time domain
 \item 1 - frequency domain
+\item 2 - phase in frequency domain
+\item 3 - symmetric time domain
+\item 4 - logarithmic frequency domain
 \end{itemize}
 \end{itemize}
-\item second argument: figure {[}1:n{]} determines in which figure the signal
-is to be plotted 
+\item second argument: figure number - determines in which figure number
+the signal is to be plotted 
 \item third argument: sample rate 
 \end{itemize}
 \item Function: Plots a signal in the requested figure. It depends on the
-argument 'type' if the Signal should be recognized as a funcion of
-time or frequency.\end{itemize}
+argument 'type' how the signal should be plotted.\end{itemize}
 %
 \end{minipage}}
 
@@ -310,9 +337,9 @@ time or frequency.\end{itemize}
 \shadowbox{\begin{minipage}[t]{1\columnwidth}%
 \begin{itemize}
 \item Name: \textbf{fourier.m}
-\item Module number: 4
+\item Module number: 3
 \item Module type: \textbf{Modifier}
-\item Arguments: \textbf{1}
+\item Arguments: 2
 
 \begin{itemize}
 \item first argument: type
@@ -326,7 +353,7 @@ time or frequency.\end{itemize}
 \item 1 - inverse fast fourier transform
 \end{itemize}
 \end{itemize}
-\item second argument: sample rate 
+\item second argument: sample rate/dist 
 \end{itemize}
 \item Function: Applies a fast fourier transform or an inverse fast fourier
 transform, depending on the argument ``type''.\end{itemize}
@@ -350,10 +377,9 @@ transform, depending on the argument ``type''.\end{itemize}
 \item {[}1:duration of signal{]} determines the length (in samples) of the
 blocks the signal will be divided into
 \end{itemize}
-\item second argument: sample rate
+\item second argument: sample rate/dist
 \end{itemize}
-\item Function: Applies a fast fourier transform or an inverse fast fourier
-transform, depending on the argument ``type''.\end{itemize}
+\item Function: Displays a three dimensional (time-dependent) spectrum.\end{itemize}
 %
 \end{minipage}}
 
@@ -365,7 +391,7 @@ transform, depending on the argument ``type''.\end{itemize}
 \item Name: \textbf{cutout.m}
 \item Module number: \textbf{5}
 \item Module type: \textbf{Modifier}
-\item Arguments: 3
+\item Arguments: 2
 
 \begin{itemize}
 \item first argument: start sample
@@ -380,7 +406,6 @@ will be cut out
 \item {[}1:endsample{]} determines the end sample of the signal which will
 be cut out
 \end{itemize}
-\item third argument: sample rate
 \end{itemize}
 \item Function: If ``startsample'' is smaller than ``endsample'', all
 samples between the two samples will be returned. If ``startsample''
@@ -399,15 +424,15 @@ the sample at that position will be returned.\end{itemize}
 \item Name: \textbf{passFilter.m}
 \item Module number: \textbf{6}
 \item Module type: \textbf{Modifier}
-\item Arguments: 4
+\item Arguments: 5
 
 \begin{itemize}
 \item first argument: type of filter
 
 \begin{itemize}
-\item 1 - lowpass
-\item 2 - highpass
-\item 3 - bandpass
+\item 0 - lowpass
+\item 1 - highpass
+\item 2 - bandpass
 \end{itemize}
 \item second argument: first frequency
 
@@ -419,9 +444,15 @@ the sample at that position will be returned.\end{itemize}
 \begin{itemize}
 \item higher limit frequency for bandpass (ignored for low- or highpass)
 \end{itemize}
-\item fourth argument: sample rate
+\item fourth argument: domain
+
+\begin{itemize}
+\item 0 - input signal is in time domain
+\item 1 - input signal is in frequency domain
 \end{itemize}
-\item Function: Applies a pass filter to the signal \end{itemize}
+\item fifth argument: sample rate/dist
+\end{itemize}
+\item Function: Applies a perfect pass filter to the signal \end{itemize}
 %
 \end{minipage}}
 
@@ -457,8 +488,8 @@ it
 \begin{itemize}
 \item first argument: sample rate
 \end{itemize}
-\item Function: Outputs the signal at the PC speaker (or at least tries
-to)\end{itemize}
+\item Function: Outputs the signal using the matlab function ``sound''
+at the PC speaker with the given sample rate (or at least tries to)\end{itemize}
 %
 \end{minipage}}
 
@@ -470,7 +501,7 @@ to)\end{itemize}
 \item Name: \textbf{resampling.m}
 \item Module number: \textbf{9}
 \item Module type: \textbf{Modifier}
-\item Arguments: 4
+\item Arguments: 3
 
 \begin{itemize}
 \item first argument: P (interpolation factor)
@@ -486,20 +517,20 @@ to)\end{itemize}
 
 \shadowbox{\begin{minipage}[t]{1\columnwidth}%
 \begin{itemize}
-\item Name: \textbf{resampling.m}
+\item Name: \textbf{digitalMix.m}
 \item Module number: \textbf{10}
 \item Module type: \textbf{Modifier}
 \item Arguments: 3
 
 \begin{itemize}
-\item first argument: parameter direction
+\item first argument: domain
 
 \begin{itemize}
-\item 0 - upstanding
-\item 1 - downstanding
+\item 0 - timedomain
+\item 1 - frequencydomain
 \end{itemize}
-\item second argument: ``distance'' in Hz
-\item third argument: sample Rate
+\item second argument: value (frequency which is used to mix in Hz)
+\item third argument: sample rate/dist
 \end{itemize}
 \item Function: Mixes the signals\end{itemize}
 %
@@ -513,16 +544,18 @@ to)\end{itemize}
 \item Name: \textbf{correlation.m}
 \item Module number: \textbf{11}
 \item Module type: \textbf{Modifier}
-\item Arguments: 2
+\item Arguments: 1
 
 \begin{itemize}
-\item first argument: length of the incoming signal
-\item second argument: incoming signal
-\end{itemize}
-\end{itemize}
-Yet it is not supported to provide any Arguments and only the signal
-correlated with itself can be calculated. This will be added later.
+\item target signal to correlate
+
 \begin{itemize}
+\item 0 - autocorrelation
+\item 1 - 802.11g short sequence
+\item 2 - 802.11g long sequence
+\item 3 - gives a prompt to load a matlab file (See \ref{sub:loadMatlab})
+\end{itemize}
+\end{itemize}
 \item Function: Correlates two signals with each other\end{itemize}
 %
 \end{minipage}}
@@ -535,13 +568,45 @@ correlated with itself can be calculated. This will be added later.
 \item Name: \textbf{plotIQ.m}
 \item Module number: \textbf{12}
 \item Module type: \textbf{Output}
-\item Arguments: 2
+\item Arguments: 0
+\item Function: Generates an IQ-Plot of the given signal.\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{findSignal}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{findSignal.m}
+\item Module number: \textbf{13}
+\item Module type: \textbf{Modifier}
+\item Arguments: 0
+\item Function: Tries to find a wireless signal\end{itemize}
+%
+\end{minipage}}
+
+
+\subsection{findCorrelation}
+
+\shadowbox{\begin{minipage}[t]{1\columnwidth}%
+\begin{itemize}
+\item Name: \textbf{findCorrelation.m}
+\item Module number: \textbf{14}
+\item Module type: \textbf{Modifier}
+\item Arguments: 1
 
 \begin{itemize}
-\item first argument: type of plot
-\item second argument: sample rate
+\item target signal to correlate
+
+\begin{itemize}
+\item 0 - autocorrelation
+\item 1 - 802.11g short sequence
+\item 2 - 802.11g long sequence
+\item 3 - gives a prompt to load a matlab file (See \ref{sub:loadMatlab})
 \end{itemize}
-\item Function: Generates an IQ-Plot of the given signal.\end{itemize}
+\end{itemize}
+\item Function: Tries to find the correlation of both signal\end{itemize}
 %
 \end{minipage}}
 
@@ -561,13 +626,13 @@ User is only capable of adding a mixture of given filters though the
 demo. Furthermore we added the possibility to upload your own signal
 or use a predefined signal. 
 
-Restrictions for the Fileupload are:
+Restrictions for the file upload are:
 \begin{itemize}
 \item Samplerate is known
 \item CSV-File
 \item File is not larger than 2MB
 \end{itemize}
-Using the complete Program you would be able to apply hundreds of
+Using the complete program you would be able to apply hundreds of
 filters after each other, save the states as files or display more
 than one plot at a time. To keep it simple we reduced it to the following
 filters
@@ -589,12 +654,12 @@ For output you can choose between:
 
 \subsection{Usage}
 \begin{enumerate}
-\item Decide if you want to get the Output as time or frequency domain or
+\item Decide if you want to get the output as time or frequency domain or
 as IQ demodulation
-\item Decide if you want to use a predefined Signal. If yes, keep the Box
+\item Decide if you want to use a predefined signal. If yes, keep the box
 checked and choose from the dropdown. If you want to use your own
-Signal, remove the checked Box and get ``Choose File'' to get a
-File from your own PC. Please note: You need to know the Samplerate
+signal, remove the checked box and get ``Choose File'' to get a
+file from your own PC. Please note: You need to know the samplerate
 and the CSV-File is not larger than 2MB.
 \item Check the filters you want to use
 
@@ -606,6 +671,18 @@ If you want to use a Pass-Filter chose which one you want to use.
 Insert the border frequencies into the boxes in Hz.
 
 \end{enumerate}
-\item TBD\end{enumerate}
+\item TBD
+\end{enumerate}
+
+\section{Possible future extension}
+
+Of course one possible extension is the addition of other filters/modules.
+
+Other possibilities (which cam to our mind while working on this program
+but we had no time to do it)
+\begin{itemize}
+\item branches
+\item conditions
+\item live input using oszilloscopes (e.g. Picoscope)\end{itemize}
 
 \end{document}

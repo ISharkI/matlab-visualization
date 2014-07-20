@@ -61,11 +61,11 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     % passfilter
     if (pass == 1)
         if (strcmp(passfilter,'low'))
-            filter = [filter; 3 0 0 0 0 0 0; 6 1 passlow 0 0 0 0; 3 1 0 0 0 0 0];
+            filter = [filter; 6 0 passlow 0 0 0 0;];
         elseif (strcmp(passfilter,'high'))
-            filter = [filter; 3 0 0 0 0 0 0; 6 1 passhigh 0 0 0 0; 3 1 0 0 0 0 0];
+            filter = [filter; 6 1 passhigh 0 0 0 0;];
         elseif (strcmp(passfilter,'band'))
-            filter = [filter; 3 0 0 0 0 0 0; 6 1 passlow passhigh 0 0 0; 3 1 0 0 0 0 0];
+            filter = [filter; 6 2 passlow passhigh 0 0 0;];
         end
     end
     
@@ -89,10 +89,10 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%
    
     if (predefined == 1)
-        visualizeSignal(inputFileLocation,ModuleArray,1);
+        visualizeSignal(ModuleArray,inputFileLocation,1);
     else
-        visualizeSignal(inputFileLocation,ModuleArray,2,samplerate);
-    end
+        visualizeSignal(ModuleArray,inputFileLocation,2,samplerate);
+    endŝ
     
     %How to save the last shown plot?
     %saveas(myplot,filename,'jpg');
