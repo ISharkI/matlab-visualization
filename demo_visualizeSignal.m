@@ -73,11 +73,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     if (mixing == 1)
         filter = [filter; 10 0 mixfreq 0 0 0 0;];
     end 
-    
-    % resample signal
-    if (resample == 1)
-        filter = [filter; 9 resamplep resampleq 0 0 0 0;];
-    end
+
     
     
     % check form of visualization
