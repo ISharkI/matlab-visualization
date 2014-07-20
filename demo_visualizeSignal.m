@@ -61,11 +61,11 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     % passfilter
     if (pass == 1)
         if (strcmp(passfilter,'low'))
-            filter = [filter; 6 0 passlow 0 0 0 0;];
+            filter = [filter; 6 1 passlow 0 0 0 0;];
         elseif (strcmp(passfilter,'high'))
-            filter = [filter; 6 1 passhigh 0 0 0 0;];
+            filter = [filter; 6 2 passhigh 0 0 0 0;];
         elseif (strcmp(passfilter,'band'))
-            filter = [filter; 6 2 passlow passhigh 0 0 0;];
+            filter = [filter; 6 3 passlow passhigh 0 0 0;];
         end
     end
     
