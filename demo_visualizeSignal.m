@@ -2,7 +2,7 @@
 % EXAMPLE: demo_visualizeSignal(visual,predefined,predefsignal)
 % Converts data from webdemo for visualizeSignal
 
-function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,passfilter,passlow,passhigh,mixing,mixfreq,uploadfile,filename)
+function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,passfilter,passlow,passhigh,mixing,mixfreq,correlate,correlation,uploadfile,filename)
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN, set up graphical output
@@ -72,6 +72,17 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     % highlight signal
     if (mixing == 1)
         filter = [filter; 10 0 mixfreq 0 0 0 0;];
+    end
+    
+    % correlation
+    if (correlate == 1)
+        if (strcmp(correlation,'autocorrelation'))
+            filter = [filter; 11 0 0 0 0 0 0;];
+        elseif (strcmp(correlation,'shortcorrelation'))
+            filter = [filter; 11 1 0 0 0 0 0;];
+        elseif (strcmp(correlation,'longcorrelation'))
+            filter = [filter; 11 2 0 0 0 0 0;];
+        end
     end
     
     % check form of visualization0
