@@ -92,7 +92,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
         visualizeSignal(ModuleArray,inputFileLocation,1);
     else
         visualizeSignal(ModuleArray,inputFileLocation,2,samplerate);
-    endŝ
+    end
     
     %How to save the last shown plot?
     %saveas(myplot,filename,'jpg');
