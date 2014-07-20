@@ -132,17 +132,17 @@ function visualizeSignal(ModuleArray,inputFileLocation,loaderModuleNumber,sample
             % pass filter
             case 6
                 % set number of arguments
-                num = 5;
+                num = 4;
                 % type
                 type = ModuleArray(i,2);
                 % parameter low frequency in Hz
                 lowfreq=ModuleArray(i,3);
                 % parameter high frequency in Hz
                 highfreq=ModuleArray(i,4);
-                domain=ModuleArray(i,5);
-                inputsignal=[num type lowfreq highfreq sampleDist domain signal];
+                inputsignal=[num type lowfreq highfreq sampleDist signal];
                 result=passFilter(inputsignal);
-                signal=result;
+                signal=result(2:end);
+                sampleDist=result(1);
             % power spectrum
             case 7
                 % set number of arguments

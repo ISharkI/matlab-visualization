@@ -61,11 +61,11 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     % passfilter
     if (pass == 1)
         if (strcmp(passfilter,'low'))
-            filter = [filter; 6 1 passlow 0 0 0 0;];
+            filter = [filter; 3 0 0 0 0 0 0; 6 1 passlow 0 0 0 0; 3 1 0 0 0 0 0];
         elseif (strcmp(passfilter,'high'))
-            filter = [filter; 6 2 passhigh 0 0 0 0;];
+            filter = [filter; 3 0 0 0 0 0 0; 6 1 passhigh 0 0 0 0; 3 1 0 0 0 0 0];
         elseif (strcmp(passfilter,'band'))
-            filter = [filter; 6 3 passlow passhigh 0 0 0;];
+            filter = [filter; 3 0 0 0 0 0 0; 6 1 passlow passhigh 0 0 0; 3 1 0 0 0 0 0];
         end
     end
         
@@ -74,18 +74,8 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
         filter = [filter; 10 0 mixfreq 0 0 0 0;];
     end
     
-    % correlation
-    if (correlate == 1)
-        if (strcmp(correlation,'autocorrelation'))
-            filter = [filter; 11 0 0 0 0 0 0;];
-        elseif (strcmp(correlation,'shortcorrelation'))
-            filter = [filter; 11 1 0 0 0 0 0;];
-        elseif (strcmp(correlation,'longcorrelation'))
-            filter = [filter; 11 2 0 0 0 0 0;];
-        end
-    end
     
-    % check form of visualization0
+    % check form of visualization
     if (strcmp(visual,'time'))
         vis = [2 0 1 0 0 0 0];
     elseif (strcmp(visual,'freq'))
