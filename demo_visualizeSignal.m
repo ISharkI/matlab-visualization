@@ -2,7 +2,7 @@
 % EXAMPLE: demo_visualizeSignal(visual,predefined,predefsignal)
 % Converts data from webdemo for visualizeSignal
 
-function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,passfilter,passlow,passhigh,highlight,highlow,highhigh,uploadfile,filename)
+function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,passfilter,passlow,passhigh,mixing,mixfreq,uploadfile,filename)
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN, set up graphical output
@@ -70,8 +70,8 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     end
         
     % highlight signal
-    if (highlight == 1)
-        filter = [filter; 5 highlow highhigh 0 0 0 0;];
+    if (mixing == 1)
+        filter = [filter; 10 0 mixfreq 0 0 0 0;];
     end
     
     % check form of visualization0
