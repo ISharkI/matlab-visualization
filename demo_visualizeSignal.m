@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % EXAMPLE: demo_visualizeSignal(visual,predefined,predefsignal)
-% Converts data from webdemo for visualizeSignal
+% Converts data from webdemo for visualizeSignalresample
 
-function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,passfilter,passlow,passhigh,mixing,mixfreq,resample,resamplep,resampleq,uploadfile,filename)
+function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,passfilter,passlow,passhigh,mixing,mixfreq,uploadfile,filename)
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN, set up graphical output
