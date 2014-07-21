@@ -26,8 +26,6 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     % END, set up graphical output
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    pgk load signal
-
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN prepare parameters for array
       
