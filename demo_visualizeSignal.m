@@ -26,6 +26,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     % END, set up graphical output
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    pgk load signal
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN prepare parameters for array
@@ -85,7 +86,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
         end
     end
     
-    % check form of visualization0
+    % check form of visualization
     if (strcmp(visual,'time'))
         vis = [2 0 1 0 0 0 0];
     elseif (strcmp(visual,'freq'))

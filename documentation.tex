@@ -2,11 +2,19 @@
 %% Do not edit unless you really know what you are doing.
 \documentclass{article}
 \setlength{\parindent}{0cm}
+\usepackage{array}
+\usepackage{rotating}
 \usepackage{fancybox}
 \usepackage{calc}
+\usepackage{multirow}
 \usepackage{graphicx}
 
 \makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
 \newenvironment{lyxcode}
 {\par\begin{list}{}{
@@ -105,9 +113,12 @@ and a wifi-example
 \subsection{Exceptions for Octave\label{sub:Exceptions-for-Octave}}
 
 Currently the following exceptions are known for ``not working''
-under Octave are
+under Octave below version 3.8 and without installed Octave-Forge
+packages. (See \ref{sec:Available-Modules} for list of modules)
 \begin{itemize}
-\item PowerSpectrum Module - as it refferes to third party Matlab files.
+\item PowerSpectrum
+\item correlation
+\item findCorrelation
 \end{itemize}
 
 \section{Components}
@@ -283,6 +294,108 @@ will be saved if you add an array of zeroes in between the modules.
 Using this module it will generate an JPG, an FIG and a MAT File containing
 the last plot and the current data.
 \end{itemize}
+\begin{table}
+\begin{centering}
+\begin{sideways}
+\begin{tabular}{|l||l|l|l|l|l|}
+\hline 
+\textbf{Module} & \textbf{\#} & \textbf{Parameter 1} & \textbf{Parameter 2} & \textbf{Parameter 3} & \textbf{Parameter 4}\tabularnewline
+\hline 
+\hline 
+saveData & 0 & - & - & - & -\tabularnewline
+\hline 
+\hline 
+delayFilter & 1 & - & - & - & -\tabularnewline
+\hline 
+\hline 
+\multirow{6}{*}{simplePlot} & \multirow{6}{*}{2} & \textbf{type:} & \multirow{6}{*}{figure number} & \multirow{6}{*}{-} & \multirow{6}{*}{-}\tabularnewline
+\cline{3-3} 
+ &  & 0 - time domain &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 1 - frequency domain &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 2 - phase in frequency &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 3 - symmetric time &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 4 - log. frequency &  &  & \tabularnewline
+\hline 
+\hline 
+\multirow{3}{*}{fourier} & \multirow{3}{*}{3} & \textbf{type:} & \multirow{3}{*}{-} & \multirow{3}{*}{-} & \multirow{3}{*}{-}\tabularnewline
+\cline{3-3} 
+ &  & 0 - FFT &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 1 - IFFT &  &  & \tabularnewline
+\hline 
+\hline 
+fourierBlocks & 4 & length (samples) & - & - & -\tabularnewline
+\hline 
+\hline 
+cutout & 5 & start sample & end sample & - & -\tabularnewline
+\hline 
+\hline 
+\multirow{4}{*}{pass filter} & \multirow{4}{*}{6} & \textbf{type:} & \textbf{first frequency:} & \textbf{second frequency:} & \textbf{input domain:}\tabularnewline
+\cline{3-6} 
+ &  & 0 - low pass & limit for LP/HP & upper limit BP & 0 - time\tabularnewline
+\cline{3-6} 
+ &  & 1 - high pass & lower limit BP & \multirow{2}{*}{} & 1 - frequency\tabularnewline
+\cline{3-4} \cline{6-6} 
+ &  & 2 - band pass &  &  & \tabularnewline
+\hline 
+\hline 
+powerSpectrum & 7 & - & - & - & -\tabularnewline
+\hline 
+\hline 
+audioOutput & 8 & - & - & - & -\tabularnewline
+\hline 
+\hline 
+resampling & 9 & P (interp. factor) & Q (dec. factor) & - & -\tabularnewline
+\hline 
+\hline 
+\multirow{3}{*}{digitalMix} & \multirow{3}{*}{10} & \textbf{domain:} & \multirow{3}{*}{frequency (Hz)} & \multirow{3}{*}{-} & \multirow{3}{*}{-}\tabularnewline
+\cline{3-3} 
+ &  & 0 - time &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 1 - frequency &  &  & \tabularnewline
+\hline 
+\hline 
+\multirow{5}{*}{correlation} & \multirow{5}{*}{11} & \textbf{target signal:} & \multirow{5}{*}{-} & \multirow{5}{*}{-} & \multirow{5}{*}{-}\tabularnewline
+\cline{3-3} 
+ &  & 0 - autocorrelate &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 1 - 802.11g short &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 2 - 802.11g long &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 3 - loading prompt &  &  & \tabularnewline
+\hline 
+\hline 
+plotIQ & 12 & - & - & - & -\tabularnewline
+\hline 
+\hline 
+findSignal & 13 & - & - & - & -\tabularnewline
+\hline 
+\hline 
+\multirow{5}{*}{findCorrelation} & \multirow{5}{*}{14} & \textbf{target signal:} & \multirow{5}{*}{-} & \multirow{5}{*}{-} & \multirow{5}{*}{-}\tabularnewline
+\cline{3-3} 
+ &  & 0 - autocorrelate &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 1 - 802.11g short &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 2 - 802.11g long &  &  & \tabularnewline
+\cline{3-3} 
+ &  & 3 - loading prompt &  &  & \tabularnewline
+\hline 
+\end{tabular}
+\end{sideways}
+\par\end{centering}
+
+\caption{Short reference for module array usage}
+
+
+\end{table}
+
+
 
 \subsection{delayFilter}
 
@@ -324,7 +437,8 @@ etc.\end{itemize}
 \end{itemize}
 \item second argument: figure number - determines in which figure number
 the signal is to be plotted 
-\item third argument: sample rate 
+\item third argument: sample rate (is automatically handed over by the supervisor
+and does not need to be part of the command array)
 \end{itemize}
 \item Function: Plots a signal in the requested figure. It depends on the
 argument 'type' how the signal should be plotted.\end{itemize}
@@ -353,7 +467,8 @@ argument 'type' how the signal should be plotted.\end{itemize}
 \item 1 - inverse fast fourier transform
 \end{itemize}
 \end{itemize}
-\item second argument: sample rate/dist 
+\item second argument: sample rate/dist (is automatically handed over by
+the supervisor and does not need to be part of the command array)
 \end{itemize}
 \item Function: Applies a fast fourier transform or an inverse fast fourier
 transform, depending on the argument ``type''.\end{itemize}
@@ -377,7 +492,8 @@ transform, depending on the argument ``type''.\end{itemize}
 \item {[}1:duration of signal{]} determines the length (in samples) of the
 blocks the signal will be divided into
 \end{itemize}
-\item second argument: sample rate/dist
+\item second argument: sample rate/dist (is automatically handed over by
+the supervisor and does not need to be part of the command array)
 \end{itemize}
 \item Function: Displays a three dimensional (time-dependent) spectrum.\end{itemize}
 %
@@ -450,9 +566,10 @@ the sample at that position will be returned.\end{itemize}
 \item 0 - input signal is in time domain
 \item 1 - input signal is in frequency domain
 \end{itemize}
-\item fifth argument: sample rate/dist
+\item fifth argument: sample rate/dist (is automatically handed over by
+the supervisor and does not need to be part of the command array)
 \end{itemize}
-\item Function: Applies a perfect pass filter to the signal \end{itemize}
+\item Function: Applies a pass filter to the signal \end{itemize}
 %
 \end{minipage}}
 
@@ -467,12 +584,14 @@ the sample at that position will be returned.\end{itemize}
 \item Arguments: 1
 
 \begin{itemize}
-\item first argument: sample rate
+\item first argument: sample rate (is automatically handed over by the supervisor
+and does not need to be part of the command array)
 \end{itemize}
 \item Function: Provides the power spectrum as data in return and also displays
 it
 \end{itemize}
-\textbf{Note:} This Module will not work with Octave.%
+\textbf{Note:} This Module will not work with Octave below version
+3.8 and installed Octave-Forge packages.%
 \end{minipage}}
 
 
@@ -486,7 +605,8 @@ it
 \item Arguments: 1
 
 \begin{itemize}
-\item first argument: sample rate
+\item first argument: sample rate (is automatically handed over by the supervisor
+and does not need to be part of the command array)
 \end{itemize}
 \item Function: Outputs the signal using the matlab function ``sound''
 at the PC speaker with the given sample rate (or at least tries to)\end{itemize}
@@ -506,7 +626,8 @@ at the PC speaker with the given sample rate (or at least tries to)\end{itemize}
 \begin{itemize}
 \item first argument: P (interpolation factor)
 \item second argument: Q (decimation factor)
-\item third argument: sample rate
+\item third argument: sample rate (is automatically handed over by the supervisor
+and does not need to be part of the command array)
 \end{itemize}
 \item Function: resamples the signal by the given factors\end{itemize}
 %
@@ -530,7 +651,8 @@ at the PC speaker with the given sample rate (or at least tries to)\end{itemize}
 \item 1 - frequencydomain
 \end{itemize}
 \item second argument: value (frequency which is used to mix in Hz)
-\item third argument: sample rate/dist
+\item third argument: sample rate/dist (is automatically handed over by
+the supervisor and does not need to be part of the command array)
 \end{itemize}
 \item Function: Mixes the signals\end{itemize}
 %
@@ -556,8 +678,10 @@ at the PC speaker with the given sample rate (or at least tries to)\end{itemize}
 \item 3 - gives a prompt to load a matlab file (See \ref{sub:loadMatlab})
 \end{itemize}
 \end{itemize}
-\item Function: Correlates two signals with each other\end{itemize}
-%
+\item Function: Correlates two signals with each other
+\end{itemize}
+\textbf{Note:} This Module will not work with Octave below version
+3.8 and installed Octave-Forge packages.%
 \end{minipage}}
 
 
@@ -606,8 +730,10 @@ at the PC speaker with the given sample rate (or at least tries to)\end{itemize}
 \item 3 - gives a prompt to load a matlab file (See \ref{sub:loadMatlab})
 \end{itemize}
 \end{itemize}
-\item Function: Tries to find the correlation of both signal\end{itemize}
-%
+\item Function: Tries to find the correlation of both signal
+\end{itemize}
+\textbf{Note:} This Module will not work with Octave below version
+3.8 and installed Octave-Forge packages.%
 \end{minipage}}
 
 
@@ -638,18 +764,16 @@ than one plot at a time. To keep it simple we reduced it to the following
 filters
 \begin{itemize}
 \item Pass-Filter (Low-/High-/Bandpass)
-\item TBD
+\item Digital Mixing
 \end{itemize}
 Possible predefined signals to chose are: 
 \begin{itemize}
 \item An Wireless Signal (Channel 1)
-\item TBD
 \end{itemize}
 For output you can choose between:
 \begin{itemize}
 \item time domain
 \item frequency domain
-\item IQ demodulation.
 \end{itemize}
 
 \subsection{Usage}
@@ -670,8 +794,13 @@ and the CSV-File is not larger than 2MB.
 If you want to use a Pass-Filter chose which one you want to use.
 Insert the border frequencies into the boxes in Hz.
 
+\item Digital Mixing
+
+
+If you want to mix your signal with an known frequency insert it in
+Hz.
+
 \end{enumerate}
-\item TBD
 \end{enumerate}
 
 \section{Possible future extension}
@@ -683,6 +812,8 @@ but we had no time to do it)
 \begin{itemize}
 \item branches
 \item conditions
-\item live input using oszilloscopes (e.g. Picoscope)\end{itemize}
+\item live input using oszilloscopes (e.g. Picoscope)
+\item If the Webdemo Server is upgraded to Octave 3.8 or above there are
+several new modules possible for the webdemo\end{itemize}
 
 \end{document}
