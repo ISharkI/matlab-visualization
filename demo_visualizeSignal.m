@@ -10,6 +10,7 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     % Create an invisible figure.
     fig = figure(1); set(fig, 'visible', 'on');
     
+    
     landscape = '-S930,350';
     portrait  = '-S640,480';
 
@@ -26,6 +27,9 @@ function demo_visualizeSignal(visual,predefined,predefsignal,samplerate,pass,pas
     % END, set up graphical output
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    % load extra packages for octave
+    pkg load signal;
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % BEGIN prepare parameters for array
       
